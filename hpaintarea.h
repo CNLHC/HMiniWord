@@ -30,6 +30,7 @@ private:
   QRect xBoundingRect;
   QRect yBoundingRect;
   HTextCursor* mCursor;
+  QString a;
 };
 
 #endif // HPAINTAREA_H

@@ -10,8 +10,8 @@
 MainWindow::MainWindow(QWidget* parent)
   : QMainWindow(parent)
 {
-  auto paintArea = new HPaintArea;
   auto paintScrollArea = new QScrollArea;
+  auto paintArea = new HPaintArea(paintScrollArea);
   setWindowTitle("MiniWord");
   paintScrollArea->setWidget(paintArea);
   paintScrollArea->setWidgetResizable(true);

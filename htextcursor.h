@@ -8,7 +8,7 @@ class HTextCursor : public QWidget
   Q_OBJECT
 public:
   HTextCursor(QWidget* parent);
-  void setPos();
+  void setPos(int, int);
   void setShape();
 
 public slots:
@@ -18,6 +18,8 @@ private:
   void blink();
   void paintEvent(QPaintEvent* event) override;
   QWidget* mParent;
+  int mx;
+  int my;
 };
 
 #endif // HTEXTCURSOR_H

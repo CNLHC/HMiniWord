@@ -9,6 +9,7 @@ HTextCursor::HTextCursor(QWidget* parent)
   , QWidget(parent)
 {
   blink();
+  this->resize(parent->size());
 }
 void
 HTextCursor::blink()
@@ -17,6 +18,14 @@ HTextCursor::blink()
   QObject::connect(timer, SIGNAL(timeout()), this, SLOT(toggleBlink()));
   timer->start(500);
 }
+void
+HTextCursor::setPos(int x, int y)
+{
+  mx = x;
+  my = y;
+  this->update();
+}
+
 void
 HTextCursor::toggleBlink()
 {
@@ -28,6 +37,6 @@ HTextCursor::paintEvent(QPaintEvent* event)
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::black);
-  QRect rect = QRect(0, 0, 10, 10);
-  painter.fillRect(QRect(0, 0, 10, 10), QBrush(Qt::black));
+  QRect rect = QRect(mx, my, 10, 20);
+  painter.fillRect(rect, QBrush(Qt::black));
 }

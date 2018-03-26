@@ -6,7 +6,7 @@
 class HRenderController
 {
 public:
-    HRenderController();
+  HRenderController();
 };
 
 #endif // HRENDERCONTROLLER_H

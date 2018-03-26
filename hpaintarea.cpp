@@ -11,10 +11,8 @@ HPaintArea::HPaintArea(QWidget* parent)
   QFont newFont = font();
   newFont.setPixelSize(12);
   setFont(newFont);
-
-  mCursor = new HTextCursor(this);
+  mCursor = new HTextCursor(parent);
   mCursor->setVisible(true);
-  mCursor->update();
   QFontMetrics fontMetrics(newFont);
   xBoundingRect = fontMetrics.boundingRect(tr("x"));
   yBoundingRect = fontMetrics.boundingRect(tr("y"));
@@ -29,6 +27,13 @@ void
 HPaintArea::paintEvent(QPaintEvent* event)
 {
   QPainter painter(this);
+  painter.setRenderHint(QPainter::Antialiasing);
+  painter.setPen(Qt::black);
+  auto font = QFont("Arial", 30);
+  QFontMetrics fm(font);
+  painter.setFont(font);
+  painter.drawText(30, 30, a);
+  mCursor->setPos(30 + fm.width(a), 10);
 }
 void
 HPaintArea::inputMethodEvent(QInputMethodEvent* event)
@@ -38,7 +43,10 @@ HPaintArea::inputMethodEvent(QInputMethodEvent* event)
 void
 HPaintArea::keyPressEvent(QKeyEvent* ev)
 {
-  qDebug() << ev;
+  qDebug() << "Mocking To Model:" << ev->text();
+  // Mocking , update slot should be connect to the model change siganl
+  a.append(ev->text());
+  this->update();
 }
 
 void
