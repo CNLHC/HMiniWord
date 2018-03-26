@@ -5,7 +5,7 @@
 #include <QPainter>
 
 HPaintArea::HPaintArea(QWidget* parent)
-  : QWidget(parent)
+  : QFrame(parent)
 {
 
   QFont newFont = font();
@@ -45,4 +45,10 @@ void
 HPaintArea::mousePressEvent(QMouseEvent* event)
 {
   qDebug() << event;
+}
+
+void
+HPaintArea::resizeEvent(QResizeEvent* event)
+{
+  qDebug() << event << "(Text Area)";
 }

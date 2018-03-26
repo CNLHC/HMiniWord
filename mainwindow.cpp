@@ -12,11 +12,13 @@ MainWindow::MainWindow(QWidget* parent)
 {
   auto paintArea = new HPaintArea;
   auto paintScrollArea = new QScrollArea;
-  setWindowTitle("Qt Main Window Example");
-
+  setWindowTitle("MiniWord");
   paintScrollArea->setWidget(paintArea);
+  paintScrollArea->setWidgetResizable(true);
   paintScrollArea->widget()->resize(560, 560);
+  paintScrollArea->resize(560, 560);
   setCentralWidget(paintScrollArea);
+  this->resize(560, 560);
   setupMenuBar();
 }
 
@@ -39,4 +41,9 @@ MainWindow::save()
 void
 MainWindow::load()
 {
+}
+void
+MainWindow::resizeEvent(QResizeEvent* event)
+{
+  qDebug() << event;
 }

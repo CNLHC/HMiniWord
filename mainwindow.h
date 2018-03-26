@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QResizeEvent>
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ private:
   void setupMenuBar();
   void save();
   void load();
+  void resizeEvent(QResizeEvent* event);
 };
 
 #endif // MAINWINDOW_H

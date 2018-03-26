@@ -27,12 +27,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     hpaintarea.cpp \
-    htextcursor.cpp
+    htextcursor.cpp \
+    hdocumentmodel.cpp \
+    hrendercontroller.cpp
 
 HEADERS += \
         mainwindow.h \
     hpaintarea.h \
-    htextcursor.h
+    htextcursor.h \
+    hdocumentmodel.h \
+    hrendercontroller.h
 
 FORMS += \
         mainwindow.ui

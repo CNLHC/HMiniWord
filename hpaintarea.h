@@ -7,7 +7,7 @@
 #include <QPainter>
 #include <QWidget>
 
-class HPaintArea : public QWidget
+class HPaintArea : public QFrame
 {
   Q_OBJECT
 public:
@@ -26,6 +26,7 @@ private:
   void inputMethodEvent(QInputMethodEvent* event) override;
   void keyPressEvent(QKeyEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
+  void resizeEvent(QResizeEvent* event) override;
   QRect xBoundingRect;
   QRect yBoundingRect;
   HTextCursor* mCursor;
