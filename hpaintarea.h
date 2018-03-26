@@ -2,6 +2,7 @@
 #define HPAINTAREA_H
 
 //#include <QInputMethodEvent>
+#include "htextcursor.h"
 #include <QAbstractScrollArea>
 #include <QPainter>
 #include <QWidget>
@@ -18,6 +19,7 @@ public:
     painter.setBrush(Qt::NoBrush);
     painter.drawRect(0, 0, 50, 50);
   }
+  ~HPaintArea();
 
 private:
   void paintEvent(QPaintEvent* event) override;
@@ -26,6 +28,7 @@ private:
   void mousePressEvent(QMouseEvent* event) override;
   QRect xBoundingRect;
   QRect yBoundingRect;
+  HTextCursor* mCursor;
 };
 
 #endif // HPAINTAREA_H

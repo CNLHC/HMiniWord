@@ -1,4 +1,5 @@
 #include "hpaintarea.h"
+#include "htextcursor.h"
 #include <QDebug>
 #include <QPaintEvent>
 #include <QPainter>
@@ -11,22 +12,23 @@ HPaintArea::HPaintArea(QWidget* parent)
   newFont.setPixelSize(12);
   setFont(newFont);
 
+  mCursor = new HTextCursor(this);
+  mCursor->setVisible(true);
+  mCursor->update();
   QFontMetrics fontMetrics(newFont);
   xBoundingRect = fontMetrics.boundingRect(tr("x"));
   yBoundingRect = fontMetrics.boundingRect(tr("y"));
   this->setCursor(Qt::IBeamCursor);
   this->grabKeyboard();
 }
+HPaintArea::~HPaintArea()
+{
+  delete mCursor;
+}
 void
 HPaintArea::paintEvent(QPaintEvent* event)
 {
   QPainter painter(this);
-  painter.setRenderHint(QPainter::Antialiasing);
-  painter.setPen(Qt::black);
-  QRect rect = QRect(0, 0, 10, 10);
-  painter.fillRect(QRect(0, 0, 10, 10), QBrush(Qt::black));
-  qDebug() << this->keyboardGrabber();
-  qDebug() << this->mouseGrabber();
 }
 void
 HPaintArea::inputMethodEvent(QInputMethodEvent* event)
