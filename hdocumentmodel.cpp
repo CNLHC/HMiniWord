@@ -61,10 +61,12 @@ HDocumentModel::composeLogicLine(int row) const
     return nullptr;
   QList<char*>& tList = *mLogicLine[row];
 
-  QSharedPointer<QString> tString = QSharedPointer<QString>(new QString);
+  QByteArray tBArray;
   for (auto i = tList.begin(); i != tList.end(); i++) {
-    tString->append(*i);
+    tBArray.append(*i);
   }
+  QSharedPointer<QString> tString = QSharedPointer<QString>(new QString);
+  *tString = (tString->fromUtf8(tBArray.data()));
   return tString;
 }
 
@@ -82,9 +84,9 @@ HDocumentModel::constructNewLine(QString Line) const
   const char* tPos = tBArray.data();
   const char* const ptrBegin = tPos;
   while (tPos - ptrBegin < tBArray.size()) {
-    char* const t = new char[3];
+    char* const t = new char[2];
     int i = 0;
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < 1; i++) {
       *(t + i) = *(tPos++);
     }
     *(t + i) = 0;
