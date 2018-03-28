@@ -1,4 +1,5 @@
 #include "hpaintarea.h"
+#include "hrendercontroller.h"
 #include "htextcursor.h"
 #include <QDebug>
 #include <QPaintEvent>
@@ -18,16 +19,18 @@ HPaintArea::HPaintArea(QWidget* parent)
   yBoundingRect = fontMetrics.boundingRect(tr("y"));
   this->setCursor(Qt::IBeamCursor);
   this->grabKeyboard();
+
+  this->mController = new HRenderController(this);
 }
 HPaintArea::~HPaintArea()
 {
   delete mCursor;
+  delete mController;
 }
 
 void
 HPaintArea::paintEvent(QPaintEvent* event)
 {
-  qDebug() << event;
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::black);
@@ -50,6 +53,10 @@ HPaintArea::keyPressEvent(QKeyEvent* ev)
   auto font = QFont("Arial", 30);
   QFontMetrics fm(font);
   mCursor->setPos(30 + fm.width(a), 10);
+  this->mController->LineNew(0, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                                "aaaaaaaaaaaaaa");
 }
 
 void

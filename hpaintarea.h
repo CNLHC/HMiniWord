@@ -2,6 +2,7 @@
 #define HPAINTAREA_H
 
 //#include <QInputMethodEvent>
+#include "hrendercontroller.h"
 #include "htextcursor.h"
 #include <QAbstractScrollArea>
 #include <QPainter>
@@ -31,6 +32,7 @@ private:
   QRect yBoundingRect;
   HTextCursor* mCursor;
   QString a;
+  HRenderController* mController;
 };
 
 #endif // HPAINTAREA_H

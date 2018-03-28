@@ -34,7 +34,6 @@ HTextCursor::toggleBlink()
 void
 HTextCursor::paintEvent(QPaintEvent* event)
 {
-  qDebug() << "Cursor Repaint";
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::black);
