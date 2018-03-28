@@ -1,0 +1,21 @@
+\contentsline {chapter}{\numberline {1}继承关系索引}{1}
+\contentsline {section}{\numberline {1.1}类继承关系}{1}
+\contentsline {chapter}{\numberline {2}类索引}{3}
+\contentsline {section}{\numberline {2.1}类列表}{3}
+\contentsline {chapter}{\numberline {3}类说明}{5}
+\contentsline {section}{\numberline {3.1}H\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Document\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Model类 参考}{5}
+\contentsline {subsection}{\numberline {3.1.1}详细描述}{6}
+\contentsline {subsection}{\numberline {3.1.2}成员函数说明}{6}
+\contentsline {subsubsection}{\numberline {3.1.2.1}compose\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Logic\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Line(int row) const }{6}
+\contentsline {subsubsection}{\numberline {3.1.2.2}create\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Logic\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Line(\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Q\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}String Line, int pos)}{6}
+\contentsline {subsubsection}{\numberline {3.1.2.3}create\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Logic\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Line(\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Q\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}String Line)}{7}
+\contentsline {subsubsection}{\numberline {3.1.2.4}delete\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Logic\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Linek(int pos)}{7}
+\contentsline {section}{\numberline {3.2}H\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Paint\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Area类 参考}{7}
+\contentsline {subsection}{\numberline {3.2.1}详细描述}{8}
+\contentsline {section}{\numberline {3.3}H\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Render\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Controller类 参考}{8}
+\contentsline {subsection}{\numberline {3.3.1}详细描述}{9}
+\contentsline {section}{\numberline {3.4}H\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Text\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Cursor类 参考}{9}
+\contentsline {subsection}{\numberline {3.4.1}详细描述}{10}
+\contentsline {section}{\numberline {3.5}Main\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}Window类 参考}{10}
+\contentsline {subsection}{\numberline {3.5.1}详细描述}{11}
+\contentsline {chapter}{索引}{13}

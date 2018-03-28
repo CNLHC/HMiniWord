@@ -1,0 +1,27 @@
+\begin{theindex}
+
+  \item {compose\+Logic\+Line}
+    \subitem {H\+Document\+Model}, 6
+  \item {create\+Logic\+Line}
+    \subitem {H\+Document\+Model}, 6
+
+  \indexspace
+
+  \item {delete\+Logic\+Linek}
+    \subitem {H\+Document\+Model}, 7
+
+  \indexspace
+
+  \item {H\+Document\+Model}, 5
+    \subitem {compose\+Logic\+Line}, 6
+    \subitem {create\+Logic\+Line}, 6
+    \subitem {delete\+Logic\+Linek}, 7
+  \item {H\+Paint\+Area}, 7
+  \item {H\+Render\+Controller}, 8
+  \item {H\+Text\+Cursor}, 9
+
+  \indexspace
+
+  \item {Main\+Window}, 10
+
+\end{theindex}
