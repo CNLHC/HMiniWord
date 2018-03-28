@@ -36,7 +36,8 @@ HEADERS += \
     hpaintarea.h \
     htextcursor.h \
     hdocumentmodel.h \
-    hrendercontroller.h
+    hrendercontroller.h \
+    概要设计.h
 
 FORMS += \
         mainwindow.ui

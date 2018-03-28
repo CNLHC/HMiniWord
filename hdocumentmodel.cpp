@@ -16,6 +16,7 @@ HDocumentModel::~HDocumentModel()
 QList<char*>&
 HDocumentModel::createLogicLine(QString Line, int pos)
 {
+  checkStatus();
   auto newLine = new QList<char*>;
   QByteArray t = Line.toUtf8();
   const char* tPos = t.data();
@@ -27,11 +28,7 @@ HDocumentModel::createLogicLine(QString Line, int pos)
     *(t + i) = 0;
     newLine->append(t);
   }
-  mLogicLine.insert(pos, newLine);
-  this->mLLCreatedFlag.insert(pos, true);
-  this->mLLUpdatedFlag.insert(pos, false);
-  this->mLLDeletedFlag.insert(pos, false);
-  emit modelChanged();
+  mLLStatus.insert(pos, HLLCreated);
   return *newLine;
 }
 QList<char*>&
@@ -55,12 +52,36 @@ HDocumentModel::composeLogicLine(int row) const
 }
 
 void
-HDocumentModel::deleteLogicLinek(int pos)
+HDocumentModel::deleteLogicLine(int pos)
 {
+  checkStatus();
   mLogicLine.removeAt(pos);
-  this->mLLCreatedFlag.removeAt(pos);
-  this->mLLUpdatedFlag.removeAt(pos);
-  this->mLLDeletedFlag[pos] =
-    true; /*!注意，此处的状态列表长度将暂时和LogicLine不同步。将在Controller层删除渲染位置时同步*/
+  mLLStatus[pos] = HLLDeleted;
   emit modelChanged();
+}
+
+void
+HDocumentModel::ensureStatus(int pos, ModelStatus type)
+{
+  switch (type) {
+    case HLLCreated:
+      mLLStatus[pos] = HLLNoChange;
+      break;
+    case HLLDeleted:
+      mLLStatus.removeAt(pos);
+      break;
+    case HLLUpdated:
+      mLLStatus[pos] = HLLNoChange;
+      break;
+    default:
+      break;
+  }
+}
+
+void
+HDocumentModel::checkStatus()
+{
+  for (auto i = mLLStatus.begin(); i != mLLStatus.end(); i++) {
+    Q_ASSERT(*i == HLLNoChange); //所有操作都应该被ensure
+  }
 }
