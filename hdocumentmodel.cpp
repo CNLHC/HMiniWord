@@ -84,9 +84,9 @@ HDocumentModel::constructNewLine(QString Line) const
   const char* tPos = tBArray.data();
   const char* const ptrBegin = tPos;
   while (tPos - ptrBegin < tBArray.size()) {
-    char* const t = new char[2];
+    char* const t = new char[100];
     int i = 0;
-    for (i = 0; i < 1; i++) {
+    for (i = 0; i < 99 && tPos - ptrBegin < tBArray.size(); i++) {
       *(t + i) = *(tPos++);
     }
     *(t + i) = 0;
