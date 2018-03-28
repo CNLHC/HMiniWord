@@ -45,12 +45,13 @@ public:
    */
   QList<char*>& createLogicLine(QString Line);
   /*!
-   * \param row 逻辑行的行数
-   * \return 指向QString 对象的指针
+   * \brief 更新逻辑行
+   * \param Line 新的逻辑行字符串
+   * \param pos 要更新的位置
    *
-   * 我将一个逻辑行内的对象复合成一个QString类型。如果行数超出了范围,则返回一个空指针。
+   * 如果pos并没有指向一个合法的行数。那么我将不会更新任何数据
    */
-  QSharedPointer<QString> composeLogicLine(int row) const;
+  void updateLogicLine(QString Line, int pos);
   /*!
    * \brief 删除逻辑行
    * \param pos 删除当前第pos行,从0开始计算。
@@ -67,6 +68,13 @@ public:
    * 该函数应该由Controller层在双缓冲区渲染完毕后调用.
    */
   void ensureStatus(int pos, ModelStatus type);
+  /*!
+   * \param pos 逻辑行的行数
+   * \return 指向QString 对象的指针
+   *
+   * 我将一个逻辑行内的对象复合成一个QString类型，并返回他的指针。如果行数超出了范围,则返回一个空指针。
+   */
+  QSharedPointer<QString> composeLogicLine(int row) const;
 
 signals:
   void modelChanged();
@@ -80,11 +88,14 @@ private:
    * Model内的数据在更改后会同步到Controller中被转换成可供View层渲染的数据。C层完成转换后
    * 应该将M层的数据置位。该函数用于在模型的C,U,D操作前调用,以保证C,M数据的一致性。
    */
-  void checkStatus();
+  void checkStatus() const;
   /*!
-   * \brief 数据存储的地方
+   * \brief 按照题目要求，构造一个存储逻辑行数据结构
+   * \param Line 要构造的逻辑行的字符串
+   * \return 一个由100字节为单位的char类型组成的链表
+   *
    */
-  void modelBackend();
+  QList<char*>* constructNewLine(QString Line) const;
 };
 
 #endif // HDOCUMENTMODEL_H
