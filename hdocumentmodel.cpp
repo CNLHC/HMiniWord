@@ -8,9 +8,7 @@ HDocumentModel::HDocumentModel()
 HDocumentModel::~HDocumentModel()
 {
   for (auto i = mLogicLine.begin(); i != mLogicLine.end(); i++) {
-    for (auto j = (*i)->begin(); j != (*i)->end(); j++) {
-      delete[] * j;
-    }
+    destructLogicLine(*i);
   }
 }
 QList<char*>&
@@ -19,7 +17,7 @@ HDocumentModel::createLogicLine(QString Line, int pos)
   checkStatus();
   auto newLine = constructNewLine(Line);
   mLogicLine.insert(pos, newLine);
-  mLLStatus.insert(pos, HLLCreated); //更新状态
+  mCurStatus = qMakePair(pos, HLLCreated);
   emit modelChanged();
   return *newLine;
 }
@@ -34,8 +32,9 @@ void
 HDocumentModel::deleteLogicLine(int pos)
 {
   checkStatus();
+  destructLogicLine(mLogicLine[pos]);
   mLogicLine.removeAt(pos);
-  mLLStatus[pos] = HLLDeleted;
+  mCurStatus = qMakePair(pos, HLLDeleted);
   emit modelChanged();
 }
 
@@ -46,25 +45,13 @@ HDocumentModel::updateLogicLine(QString Line, int pos)
   mLogicLine.removeAt(pos);
   auto newLine = constructNewLine(Line);
   mLogicLine.insert(pos, newLine);
-  mLLStatus[pos] = HLLUpdated;
+  mCurStatus = qMakePair(pos, HLLDeleted);
   emit modelChanged();
 }
 void
-HDocumentModel::ensureStatus(int pos, ModelStatus type)
+HDocumentModel::ensureStatus()
 {
-  switch (type) {
-    case HLLCreated:
-      mLLStatus[pos] = HLLNoChange;
-      break;
-    case HLLDeleted:
-      mLLStatus.removeAt(pos);
-      break;
-    case HLLUpdated:
-      mLLStatus[pos] = HLLNoChange;
-      break;
-    default:
-      break;
-  }
+  mCurStatus = qMakePair(-1, HLLNoChange);
 }
 
 QSharedPointer<QString>
@@ -84,26 +71,32 @@ HDocumentModel::composeLogicLine(int row) const
 void
 HDocumentModel::checkStatus() const
 {
-  for (auto i = mLLStatus.begin(); i != mLLStatus.end(); i++) {
-    Q_ASSERT(*i != HLLCreated); //所有操作都应该被ensure
-    Q_ASSERT(*i != HLLUpdated); //所有操作都应该被ensure
-    Q_ASSERT(*i != HLLDeleted); //所有操作都应该被ensure
-  }
+  Q_ASSERT(mCurStatus.second == HLLNoChange); //所有操作都应该被ensure
 }
 
 QList<char*>*
 HDocumentModel::constructNewLine(QString Line) const
 {
   auto newLine = new QList<char*>;
-  QByteArray t = Line.toUtf8();
-  const char* tPos = t.data();
-  while (*tPos != 0) {
-    char* const t = new char[10];
+  QByteArray tBArray = Line.toUtf8();
+  const char* tPos = tBArray.data();
+  const char* const ptrBegin = tPos;
+  while (tPos - ptrBegin < tBArray.size()) {
+    char* const t = new char[3];
     int i = 0;
-    for (i = 0; i < 9 && tPos != 0; i++)
+    for (i = 0; i < 3; i++) {
       *(t + i) = *(tPos++);
+    }
     *(t + i) = 0;
     newLine->append(t);
   }
   return newLine;
+}
+
+void
+HDocumentModel::destructLogicLine(QList<char*>* ptrLLList)
+{
+  for (auto j = ptrLLList->begin(); j != ptrLLList->end(); j++) {
+    delete[] * j;
+  }
 }

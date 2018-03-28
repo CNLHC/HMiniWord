@@ -7,7 +7,7 @@
 #include <QString>
 #include <QtGlobal>
 
-class HDocumentModel : QObject
+class HDocumentModel : public QObject
 {
   Q_OBJECT
 public:
@@ -67,7 +67,7 @@ public:
    *
    * 该函数应该由Controller层在双缓冲区渲染完毕后调用.
    */
-  void ensureStatus(int pos, ModelStatus type);
+  void ensureStatus();
   /*!
    * \param pos 逻辑行的行数
    * \return 指向QString 对象的指针
@@ -75,6 +75,14 @@ public:
    * 我将一个逻辑行内的对象复合成一个QString类型，并返回他的指针。如果行数超出了范围,则返回一个空指针。
    */
   QSharedPointer<QString> composeLogicLine(int row) const;
+  /*!
+   * \brief 获取当前Model的状态
+   */
+  ModelStatus getStatus() { return mCurStatus.second; }
+  /*!
+   * \brief 获取当前的逻辑行长度
+   */
+  int getLogicLineSize() { return mLogicLine.size(); }
 
 signals:
   void modelChanged();
@@ -83,6 +91,7 @@ private:
   QList<QList<char*>*> mLogicLine;
 
   QList<ModelStatus> mLLStatus;
+  QPair<int, ModelStatus> mCurStatus;
 
   /*!
    * Model内的数据在更改后会同步到Controller中被转换成可供View层渲染的数据。C层完成转换后
@@ -96,6 +105,13 @@ private:
    *
    */
   QList<char*>* constructNewLine(QString Line) const;
+  /*!
+   * \brief 释放逻辑行占用的堆内存
+   * \param ptrLList 指向存储堆结构的链表头指针
+   *
+   * 注意我并不会删除容器。请在调用我之后手动对容器进行删除。
+   */
+  void destructLogicLine(QList<char*>* ptrLLList);
 };
 
 #endif // HDOCUMENTMODEL_H
