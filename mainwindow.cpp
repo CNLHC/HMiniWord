@@ -1,24 +1,18 @@
 #include "mainwindow.h"
-#include "hpaintarea.h"
+#include "htextedit.h"
 #include "ui_mainwindow.h"
-#include <QGridLayout>
-
 #include <QComboBox>
 #include <QDebug>
+#include <QGridLayout>
 #include <QScrollArea>
 #include <QTextEdit>
 MainWindow::MainWindow(QWidget* parent)
   : QMainWindow(parent)
 {
-  auto paintScrollArea = new QScrollArea;
-  auto paintArea = new HPaintArea(paintScrollArea);
-  setWindowTitle("MiniWord");
-  paintScrollArea->setWidget(paintArea);
-  paintScrollArea->setWidgetResizable(true);
-  paintScrollArea->widget()->resize(560, 560);
-  paintScrollArea->resize(560, 560);
-  setCentralWidget(paintScrollArea);
-  this->resize(560, 560);
+  this->resize(600, 600);
+  auto htextedit = new HTextEdit(this);
+  mHTextEdit = htextedit;
+  setCentralWidget(mHTextEdit);
   setupMenuBar();
 }
 
@@ -41,9 +35,4 @@ MainWindow::save()
 void
 MainWindow::load()
 {
-}
-void
-MainWindow::resizeEvent(QResizeEvent* event)
-{
-  qDebug() << event;
 }

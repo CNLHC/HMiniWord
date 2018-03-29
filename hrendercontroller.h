@@ -9,49 +9,42 @@ class HRenderController : public QObject
 {
   Q_OBJECT
 private:
+  struct screenLineItem
+  {
+    screenLineItem(QString str, QList<int> widthList)
+      : mString(str)
+      , mWidthList(widthList)
+    {
+    }
+    QString mString;
+    QList<int> mWidthList;
+    QPoint mRenderPos;
+  };
   QWidget* mParent;
-
-  QList<QList<QPair<QString, QPoint>>*> mLogicLine;
+  QList<QList<screenLineItem>*> mLogicLine;
   HDocumentModel* mModel;
-  QFont mFont;
-  /*!
-   * \brief  逻辑行渲染重载
-   * \param begin 逻辑行开始点
-   * \param end 逻辑行结束点
-   *
-   * 我是 renderString(QList<QList<QString*>>::iterator iter) 的重载类型.
-   * 我可以对一个范围内的逻辑行进行渲染。
-   *
-   */
-  void renderString(int begin, int end);
-  /*!
-   * \brief 将逻辑行渲染为屏幕行
-   * \param iter 指向需要渲染逻辑行的迭代器
-   * \todo 可以将线性查找优化为二分查找
-   *
-   * 我的主要任务是将一个逻辑行渲染成若干个屏幕行，以将它们完整的显示在屏幕上。
-   *
-   * 我将直接在 mScreenLine 变量上作修改.
-   */ void
-  renderString(QList<QList<QPair<QString, QPoint>>*>::iterator iter);
-  void renderPoistionTable();
 
-  /*!
-   * \brief  计算换行点
-   * \param line 输入字符串.
-   * \return 换行点列表
-   *
-   * 我负责计算在当前的屏幕宽度下，输入字符串应该在哪些位置换行才能保证文本不被遮挡。
-   *
-   * 我返回的换行点列表至少包括两个值。(在不换行的情况下，返回首字符位置和尾字符位置)
-   */
-  QList<int> renderGenBreakPoint(const QString& line);
+  void createLogicLine(int pos);
+  void renderLogicLine(QList<QList<screenLineItem>*>::iterator iter);
+  void deleteLogicLine(QList<QList<screenLineItem>*>::iterator iter);
+  void deRenderLogicLine(QList<QList<screenLineItem>*>::iterator iter);
+  int LL2LastSL(QList<QList<screenLineItem>*>::iterator iter);
+  int LL2FirstSL(QList<QList<screenLineItem>*>::iterator iter);
+  void determinRenderPosition();
+
+signals:
+  void lineExceed();
 
 public slots:
   void renderDisptach();
 
 public:
+  QFont mFont;
   HRenderController(QWidget* parent);
+  int maxHeight;
+  int mLineinterval = 0;
+  int xLeftOffset = 5;
+
   ~HRenderController();
   /*!
    * \brief 获取父元素尺寸
@@ -93,7 +86,7 @@ public:
    * 其中Qpair的第一个变量 为渲染的位置.
    * 第二个变量为该行文本
    */
-  QList<QPair<QString, QPoint>*> mScreenLine;
+  QList<screenLineItem*> mScreenLine;
 };
 
 #endif // HRENDERCONTROLLER_H

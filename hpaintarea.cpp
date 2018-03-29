@@ -5,26 +5,17 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-HPaintArea::HPaintArea(QWidget* parent)
+HPaintArea::HPaintArea(QWidget* parent, HTextCursor* cursor)
   : QFrame(parent)
+  , mParent(parent)
 {
-
-  QFont newFont = font();
-  newFont.setPixelSize(12);
-  setFont(newFont);
-  mCursor = new HTextCursor(parent);
-
-  QFontMetrics fontMetrics(newFont);
-  xBoundingRect = fontMetrics.boundingRect(tr("x"));
-  yBoundingRect = fontMetrics.boundingRect(tr("y"));
+  this->resize(parent->size());
   this->setCursor(Qt::IBeamCursor);
-  this->grabKeyboard();
-
+  this->mCursor = cursor;
   this->mController = new HRenderController(this);
 }
 HPaintArea::~HPaintArea()
 {
-  delete mCursor;
   delete mController;
 }
 
@@ -34,39 +25,50 @@ HPaintArea::paintEvent(QPaintEvent* event)
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::black);
-  auto font = QFont("Arial", 30);
+  auto font = this->mController->mFont;
   painter.setFont(font);
-  painter.drawText(30, 30, a);
-}
-void
-HPaintArea::inputMethodEvent(QInputMethodEvent* event)
-{
-  qDebug() << event;
+  for (auto i = this->mController->mScreenLine.begin();
+       i != this->mController->mScreenLine.end(); i++) {
+    painter.drawText((*i)->mRenderPos, (*i)->mString);
+  }
 }
 void
 HPaintArea::keyPressEvent(QKeyEvent* ev)
 {
-  qDebug() << "Mocking To Model:" << ev->text();
-  // Mocking , update slot should be connect to the model change siganl
-  a.append(ev->text());
-  this->update();
-  auto font = QFont("Arial", 30);
-  QFontMetrics fm(font);
-  mCursor->setPos(30 + fm.width(a), 10);
-  this->mController->LineNew(0, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                                "aaaaaaaaaaaaaa");
 }
-
 void
 HPaintArea::mousePressEvent(QMouseEvent* event)
 {
-  qDebug() << event;
 }
 
-void
-HPaintArea::resizeEvent(QResizeEvent* event)
+QPair<int, int>
+HPaintArea::point2Coord(QPointF point)
 {
-  qDebug() << event << "(Text Area)";
+  int lineInterval = this->mController->mLineinterval;
+  int lineHeight = QFontMetrics(this->mController->mFont).height();
+  int maxH = (lineInterval + lineHeight) * mController->mScreenLine.size();
+  int row = 0, column = 0;
+
+  if (point.y() > maxH) {
+    row = mController->mScreenLine.size() - 1;
+    row = row > 0 ? row : 0;
+  } else if (static_cast<int>(point.y()) % (lineInterval + lineHeight) == 0)
+    row = (point.y() - 1) / (lineInterval + lineHeight);
+  else
+    row = point.y() > 0 ? point.y() / (lineInterval + lineHeight) : 0;
+
+  if (mController->mScreenLine.size() == 0) {
+    column = 0;
+  } else if (point.x() >= mController->mScreenLine[row]->mWidthList.back())
+    column = mController->mScreenLine[row]->mWidthList.size() - 1;
+  else {
+    auto i = mController->mScreenLine[row]->mWidthList.begin();
+    for (; i != mController->mScreenLine[row]->mWidthList.end(); i++)
+      if (point.x() < (*i) + mController->xLeftOffset) {
+        column = i - mController->mScreenLine[row]->mWidthList.begin();
+        break;
+      }
+  }
+
+  return qMakePair(row, column);
 }

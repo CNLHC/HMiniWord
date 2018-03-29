@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "htextedit.h"
 #include <QMainWindow>
 #include <QResizeEvent>
 
@@ -23,7 +24,8 @@ private:
   void setupMenuBar();
   void save();
   void load();
-  void resizeEvent(QResizeEvent* event);
+  HTextEdit* mHTextEdit;
+  void resizeEvent(QResizeEvent* event) { mHTextEdit->resize(event->size()); }
 };
 
 #endif // MAINWINDOW_H

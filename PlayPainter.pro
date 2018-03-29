@@ -29,7 +29,8 @@ SOURCES += \
     hpaintarea.cpp \
     htextcursor.cpp \
     hdocumentmodel.cpp \
-    hrendercontroller.cpp
+    hrendercontroller.cpp \
+    htextedit.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,7 +38,8 @@ HEADERS += \
     htextcursor.h \
     hdocumentmodel.h \
     hrendercontroller.h \
-    概要设计.h
+    概要设计.h \
+    htextedit.h
 
 FORMS += \
         mainwindow.ui

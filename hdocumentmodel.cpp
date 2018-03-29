@@ -45,7 +45,7 @@ HDocumentModel::updateLogicLine(QString Line, int pos)
   mLogicLine.removeAt(pos);
   auto newLine = constructNewLine(Line);
   mLogicLine.insert(pos, newLine);
-  mCurStatus = qMakePair(pos, HLLDeleted);
+  mCurStatus = qMakePair(pos, HLLUpdated);
   emit modelChanged();
 }
 void
@@ -57,15 +57,15 @@ HDocumentModel::ensureStatus()
 QSharedPointer<QString>
 HDocumentModel::composeLogicLine(int row) const
 {
-  if (row > mLogicLine.length())
-    return nullptr;
+  QSharedPointer<QString> tString = QSharedPointer<QString>(new QString);
+  if (row >= mLogicLine.length())
+    return tString;
   QList<char*>& tList = *mLogicLine[row];
 
   QByteArray tBArray;
   for (auto i = tList.begin(); i != tList.end(); i++) {
     tBArray.append(*i);
   }
-  QSharedPointer<QString> tString = QSharedPointer<QString>(new QString);
   *tString = (tString->fromUtf8(tBArray.data()));
   return tString;
 }

@@ -12,27 +12,18 @@ class HPaintArea : public QFrame
 {
   Q_OBJECT
 public:
-  HPaintArea(QWidget* parent = 0);
-  void drawOutline(QPainter& painter)
-  {
-    painter.setPen(Qt::darkGreen);
-    painter.setPen(Qt::DashLine);
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRect(0, 0, 50, 50);
-  }
+  HPaintArea(QWidget* parent, HTextCursor* cursor);
   ~HPaintArea();
+  QWidget* mParent;
+  HRenderController* mController;
+  QPair<int, int> point2Coord(QPointF point);
 
 private:
   void paintEvent(QPaintEvent* event) override;
-  void inputMethodEvent(QInputMethodEvent* event) override;
-  void keyPressEvent(QKeyEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
-  void resizeEvent(QResizeEvent* event) override;
-  QRect xBoundingRect;
-  QRect yBoundingRect;
+  void keyPressEvent(QKeyEvent* event) override;
   HTextCursor* mCursor;
   QString a;
-  HRenderController* mController;
 };
 
 #endif // HPAINTAREA_H

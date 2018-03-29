@@ -29,7 +29,11 @@ HTextCursor::setPos(int x, int y)
 void
 HTextCursor::toggleBlink()
 {
-  this->setVisible(!this->isVisible());
+  if (mCurColor == mColor1)
+    mCurColor = mColor2;
+  else
+    mCurColor = mColor1;
+  this->update();
 }
 void
 HTextCursor::paintEvent(QPaintEvent* event)
@@ -38,5 +42,5 @@ HTextCursor::paintEvent(QPaintEvent* event)
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::black);
   QRect rect = QRect(mx, my, 10, 20);
-  painter.fillRect(rect, QBrush(Qt::black));
+  painter.fillRect(rect, QBrush(this->mCurColor));
 }

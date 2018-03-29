@@ -78,7 +78,7 @@ public:
   /*!
    * \brief 获取当前Model的状态
    */
-  ModelStatus getStatus() { return mCurStatus.second; }
+  QPair<int, ModelStatus> getStatus() { return mCurStatus; }
   /*!
    * \brief 获取当前的逻辑行长度
    */

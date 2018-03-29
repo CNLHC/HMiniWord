@@ -16,6 +16,9 @@ public slots:
 
 private:
   void blink();
+  QColor mColor1 = QColor(128, 128, 255, 128);
+  QColor mColor2 = QColor(0, 0, 0, 255);
+  QColor mCurColor;
   void paintEvent(QPaintEvent* event) override;
   QWidget* mParent;
   int mx;
