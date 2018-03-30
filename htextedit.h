@@ -4,6 +4,7 @@
 #include "hpaintarea.h"
 #include "hrendercontroller.h"
 #include "htextcursor.h"
+#include <QDebug>
 #include <QScrollArea>
 #include <QWidget>
 #include <cctype>
@@ -28,7 +29,6 @@ private:
   QPair<int, int> tempPoint;
   void resizeEvent(QResizeEvent* event)
   {
-    qDebug() << "htext edit" << event;
     mCursor->resize(event->size());
     mPaintArea->resize(event->size());
     mParent->resize(event->size());
@@ -36,7 +36,6 @@ private:
   }
   void keyPressEvent(QKeyEvent* ev)
   {
-    qDebug() << ev;
     auto cor = mCursor->getPriCursor();
     auto controller = mPaintArea->mController;
     if (ev->key() == Qt::Key_Backspace) {
@@ -99,22 +98,16 @@ private:
   }
   void mousePressEvent(QMouseEvent* event)
   {
-    qDebug() << mPaintArea->point2Coord((event->localPos()));
     auto p = mPaintArea->point2Coord((event->localPos()));
     tempPoint = p;
     this->mCursor->setPos(p.first, p.second, p.first, p.second);
   }
   void mouseMoveEvent(QMouseEvent* event)
   {
-    qDebug() << mPaintArea->point2Coord((event->localPos()));
     auto p = mPaintArea->point2Coord((event->localPos()));
     this->mCursor->setPos(tempPoint.first, tempPoint.second, p.first, p.second);
   }
-  void mouseReleaseEvent(QMouseEvent* event)
-  {
-    qDebug() << mPaintArea->point2Coord((event->localPos()));
-    qDebug() << event->localPos();
-  }
+  void mouseReleaseEvent(QMouseEvent* event) {}
 
   QSize sizeHint() { return QSize(600, 600); }
 };

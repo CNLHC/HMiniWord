@@ -10,10 +10,10 @@ HPaintArea::HPaintArea(QWidget* parent)
 {
   this->resize(parent->size());
   this->mController = new HRenderController(this);
-  this->setCursor(Qt::IBeamCursor);
 }
 HPaintArea::~HPaintArea()
 {
+  delete this->mController;
 }
 
 void

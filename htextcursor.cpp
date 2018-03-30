@@ -14,7 +14,6 @@ HTextCursor::HTextCursor(QWidget* parent, HRenderController* controller)
   QObject::connect(BlinkTimer, SIGNAL(timeout()), this, SLOT(toggleBlink()));
   this->resize(parent->size());
 }
-
 void
 HTextCursor::blink()
 {
@@ -26,7 +25,6 @@ HTextCursor::Closeblink()
   BlinkTimer->stop();
   mCurColor = mColor1;
 }
-
 void
 HTextCursor::setCursor(int row1, int column1, int row2, int column2)
 {
@@ -58,7 +56,6 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
     column1 = -1;
   if (column2 < -1)
     column2 = -1;
-  qDebug() << "Cursor Set" << row1 << column1 << row2 << column2;
   this->renderAera.clear();
   this->setCursor(row1, column1, row2, column2);
 
@@ -98,7 +95,6 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
   }
   this->update();
 }
-
 void
 HTextCursor::toggleBlink()
 {
@@ -108,7 +104,6 @@ HTextCursor::toggleBlink()
     mCurColor = mColor1;
   this->update();
 }
-
 void
 HTextCursor::paintEvent(QPaintEvent* event)
 {

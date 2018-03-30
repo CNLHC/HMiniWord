@@ -9,6 +9,7 @@ HDocumentModel::~HDocumentModel()
 {
   for (auto i = mLogicLine.begin(); i != mLogicLine.end(); i++) {
     destructLogicLine(*i);
+    delete *i;
   }
 }
 QList<char*>&
