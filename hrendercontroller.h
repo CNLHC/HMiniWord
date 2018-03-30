@@ -21,14 +21,11 @@ private:
     QPoint mRenderPos;
   };
   QWidget* mParent;
-  QList<QList<screenLineItem>*> mLogicLine;
   HDocumentModel* mModel;
   void createLogicLine(int pos);
   void renderLogicLine(QList<QList<screenLineItem>*>::iterator iter);
   void deleteLogicLine(QList<QList<screenLineItem>*>::iterator iter);
   void deRenderLogicLine(QList<QList<screenLineItem>*>::iterator iter);
-  int LL2LastSL(QList<QList<screenLineItem>*>::iterator iter);
-  int LL2FirstSL(QList<QList<screenLineItem>*>::iterator iter);
   void determinRenderPosition();
 
 signals:
@@ -40,8 +37,11 @@ public slots:
 public:
   QFont mFont;
   HRenderController(QWidget* parent);
+  QList<QList<screenLineItem>*> mLogicLine;
   int SL2LL(int row);
   int SLC2LLC(int row, int column);
+  int LL2LastSL(QList<QList<screenLineItem>*>::iterator iter);
+  int LL2FirstSL(QList<QList<screenLineItem>*>::iterator iter);
   bool isBlankLine(int row);
   int maxHeight;
   int mLineinterval = 0;

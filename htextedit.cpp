@@ -28,6 +28,7 @@ HTextEdit::HTextEdit(QWidget* parent)
   resize(parent->size());
 
   mPaintArea->mController->LineNew(0, "");
+  mCursor->setPos(0, -1);
 
   this->grabKeyboard();
 }

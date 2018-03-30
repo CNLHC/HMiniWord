@@ -8,7 +8,7 @@ HRenderController::HRenderController(QWidget* parent)
   : mParent(parent)
 {
   this->mModel = new HDocumentModel();
-  mFont = QFont("Consola", 18);
+  mFont = QFont("Courier", 18);
   mLineHeight = QFontMetrics(mFont).height();
   QObject::connect(this->mModel, SIGNAL(modelChanged()), this,
                    SLOT(renderDisptach()));
@@ -53,10 +53,15 @@ HRenderController::renderDisptach()
       createLogicLine(row);
       renderLogicLine(mLogicLine.begin() + row);
       break;
-    default:
     case HDocumentModel::HLLUpdated:
       deRenderLogicLine(mLogicLine.begin() + row);
       renderLogicLine(mLogicLine.begin() + row);
+      break;
+    case HDocumentModel::HLLDeleted:
+      deRenderLogicLine(mLogicLine.begin() + row);
+      deleteLogicLine(mLogicLine.begin() + row);
+      break;
+    default:
       break;
   }
 
@@ -159,8 +164,9 @@ HRenderController::SL2LL(int row)
         return i;
     }
   }
+  Q_ASSERT(1 == 0);
+  return 0;
 }
-
 bool
 HRenderController::isBlankLine(int row)
 {
@@ -184,7 +190,6 @@ HRenderController::determinRenderPosition()
     emit lineExceed();
   }
 }
-
 int
 HRenderController::SLC2LLC(int row, int column)
 {

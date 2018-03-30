@@ -53,6 +53,11 @@ HTextCursor::setPos(int row1, int column1)
 void
 HTextCursor::setPos(int row1, int column1, int row2, int column2)
 {
+
+  if (column1 < -1)
+    column1 = -1;
+  if (column2 < -1)
+    column2 = -1;
   qDebug() << "Cursor Set" << row1 << column1 << row2 << column2;
   this->renderAera.clear();
   this->setCursor(row1, column1, row2, column2);
