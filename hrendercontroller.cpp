@@ -8,7 +8,8 @@ HRenderController::HRenderController(QWidget* parent)
   : mParent(parent)
 {
   this->mModel = new HDocumentModel();
-  mFont = QFont("Arial", 18);
+  mFont = QFont("Consola", 18);
+  mLineHeight = QFontMetrics(mFont).height();
   QObject::connect(this->mModel, SIGNAL(modelChanged()), this,
                    SLOT(renderDisptach()));
 }
@@ -30,10 +31,6 @@ void
 HRenderController::LineUpdateAdd(int row, int column, QString str)
 {
   auto originStr = this->mModel->composeLogicLine(row);
-  if (originStr->size() == 0) {
-    LineNew(row, str);
-    return;
-  }
   originStr->insert(column, str);
   this->mModel->updateLogicLine(*originStr, row);
 }
@@ -67,7 +64,6 @@ HRenderController::renderDisptach()
   this->mParent->update();
   this->mModel->ensureStatus();
 }
-
 void
 HRenderController::createLogicLine(int pos)
 {
@@ -91,7 +87,6 @@ HRenderController::renderLogicLine(QList<QList<screenLineItem>*>::iterator iter)
       widthList.append(fm.width(str.left(i).toString()));
     return widthList;
   };
-
   for (int i = 1; i <= tStr->size(); i++) {
     if (fm.width(tStr->left(i)) > screenWidth * mul) {
       screenLineList->append(screenLineItem(
@@ -101,9 +96,14 @@ HRenderController::renderLogicLine(QList<QList<screenLineItem>*>::iterator iter)
       mul++;
     }
   }
-  screenLineList->append(screenLineItem(
-    tStr->mid(breakPoint, tStr->size() - breakPoint),
-    genWidthList(tStr->midRef(breakPoint, tStr->size() - breakPoint), fm)));
+  int totalSize = 0;
+  for (int i = 0; i < screenLineList->size(); i++)
+    totalSize += (*screenLineList)[i].mString.size();
+
+  if (!(totalSize == tStr->size() && totalSize > 0))
+    screenLineList->append(screenLineItem(
+      tStr->mid(breakPoint, tStr->size() - breakPoint),
+      genWidthList(tStr->midRef(breakPoint, tStr->size() - breakPoint), fm)));
 
   int insertPoint = LL2LastSL(iter - 1);
 
@@ -131,7 +131,6 @@ HRenderController::deRenderLogicLine(
   delete *iter;
   *iter = nullptr;
 }
-
 int
 HRenderController::LL2LastSL(QList<QList<screenLineItem>*>::iterator iter)
 {
@@ -150,7 +149,25 @@ HRenderController::LL2FirstSL(QList<QList<screenLineItem>*>::iterator iter)
   context = mScreenLine.indexOf(&((*iter)->first()));
   return context;
 }
+int
+HRenderController::SL2LL(int row)
+{
+  for (int i = 0; i <= mLogicLine.size(); i++) {
+    auto pList = mLogicLine[i];
+    for (int j = 0; j < pList->size(); j++) {
+      if (&(*pList)[j] == mScreenLine[row])
+        return i;
+    }
+  }
+}
 
+bool
+HRenderController::isBlankLine(int row)
+{
+  if (mScreenLine[row]->mString.size() == 0)
+    return true;
+  return false;
+}
 void
 HRenderController::determinRenderPosition()
 {
@@ -166,4 +183,20 @@ HRenderController::determinRenderPosition()
     maxHeight = height;
     emit lineExceed();
   }
+}
+
+int
+HRenderController::SLC2LLC(int row, int column)
+{
+  int LLindex = SL2LL(row);
+  auto heapHeader = mLogicLine[LLindex];
+  int SLpos = 0;
+  for (; SLpos <= heapHeader->size();
+       SLpos++) //寻找给定屏幕行在其所在堆链表中的序号
+    if (&((*heapHeader)[SLpos]) == mScreenLine[row])
+      break;
+  int offset = 0;
+  for (int i = 0; i < SLpos; i++) //计算偏移量
+    offset += (*heapHeader)[i].mString.size();
+  return column + offset;
 }

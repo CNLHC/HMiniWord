@@ -9,8 +9,8 @@ HTextEdit::HTextEdit(QWidget* parent)
   , mParent(parent)
 {
   mScrollView = new QScrollArea(this);
-  mCursor = new HTextCursor(mScrollView);
-  mPaintArea = new HPaintArea(mScrollView, mCursor);
+  mPaintArea = new HPaintArea(mScrollView);
+  mCursor = new HTextCursor(mScrollView, mPaintArea->getController());
 
   mScrollView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   mScrollView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -21,10 +21,14 @@ HTextEdit::HTextEdit(QWidget* parent)
   mCursor->stackUnder(mPaintArea);
   QObject::connect(mPaintArea->mController, SIGNAL(lineExceed()), this,
                    SLOT(resizeTextArea()));
+
   mScrollView->widget()->resize(parent->size());
   mScrollView->resize(parent->size());
   mCursor->resize(parent->size());
   resize(parent->size());
+
+  mPaintArea->mController->LineNew(0, "");
+
   this->grabKeyboard();
 }
 void

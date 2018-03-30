@@ -8,21 +8,19 @@
 #include <QPainter>
 #include <QWidget>
 
-class HPaintArea : public QFrame
+class HPaintArea : public QWidget
 {
   Q_OBJECT
 public:
-  HPaintArea(QWidget* parent, HTextCursor* cursor);
+  HPaintArea(QWidget* parent);
   ~HPaintArea();
   QWidget* mParent;
-  HRenderController* mController;
   QPair<int, int> point2Coord(QPointF point);
+  HRenderController* getController() { return mController; }
+  HRenderController* mController;
 
 private:
   void paintEvent(QPaintEvent* event) override;
-  void mousePressEvent(QMouseEvent* event) override;
-  void keyPressEvent(QKeyEvent* event) override;
-  HTextCursor* mCursor;
   QString a;
 };
 

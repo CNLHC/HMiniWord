@@ -23,7 +23,6 @@ private:
   QWidget* mParent;
   QList<QList<screenLineItem>*> mLogicLine;
   HDocumentModel* mModel;
-
   void createLogicLine(int pos);
   void renderLogicLine(QList<QList<screenLineItem>*>::iterator iter);
   void deleteLogicLine(QList<QList<screenLineItem>*>::iterator iter);
@@ -41,10 +40,13 @@ public slots:
 public:
   QFont mFont;
   HRenderController(QWidget* parent);
+  int SL2LL(int row);
+  int SLC2LLC(int row, int column);
+  bool isBlankLine(int row);
   int maxHeight;
   int mLineinterval = 0;
   int xLeftOffset = 5;
-
+  int mLineHeight;
   ~HRenderController();
   /*!
    * \brief 获取父元素尺寸
