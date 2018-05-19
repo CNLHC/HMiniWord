@@ -39,14 +39,16 @@ HPaintArea::point2Coord(QPointF point)
   int row = 0, column = 0;
 
   //获取屏幕行数
-  if (point.y() > maxH) {
+  if (point.y() > maxH) {//光标超出最后一行
     row = mController->mScreenLine.size() - 1;
     row = row > 0 ? row : 0;
-  } else if (static_cast<int>(point.y()) % (lineInterval + lineHeight) == 0) {
+  } else if (point.y()<0)//光标为负
+      row =0;
+  else if (static_cast<int>(point.y()) % (lineInterval + lineHeight) == 0) //光标恰好在行交界处
     row = (point.y() - 1) / (lineInterval + lineHeight);
-  } else {
+  else //光标在行中
     row = point.y() > 0 ? point.y() / (lineInterval + lineHeight) : 0;
-  }
+
 
   //获取屏幕行列数
   if (mController->mScreenLine.size() == 0) {
