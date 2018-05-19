@@ -50,10 +50,10 @@ HPaintArea::point2Coord(QPointF point)
 
   //获取屏幕行列数
   if (mController->mScreenLine.size() == 0) {
-    Q_ASSERT(1 == 0); //这种情形不应该出现
+    Q_ASSERT(1 == 0); //这种情形不应该出现,至少有一个空行存在
     column = -1;
   } else if (mController->isBlankLine(row)) {
-    column = -1;
+    column = -1;//如果当前为空行，则设置游标到-1位置
   } else if (point.x() >= mController->mScreenLine[row]->mWidthList.back()) {
     column = mController->mScreenLine[row]->mWidthList.size() - 1;
   } else {

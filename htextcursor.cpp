@@ -75,7 +75,6 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
     else
       return mController->mScreenLine[row]->mWidthList[col];
   };
-
   for (int i = altCursor.first; i <= priCursor.first; i++) {
     if (!mController->isBlankLine(i)) {
       firstx = (i == altCursor.first) ? col2width(i, altCursor.second - 1) :0 ;
