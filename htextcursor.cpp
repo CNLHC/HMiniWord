@@ -55,18 +55,18 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
     column1 = -1;
   if (column2 < -1)
     column2 = -1;
-  this->renderAera.clear();
   this->setCursor(row1, column1, row2, column2);
-
-  const int offset = mController->xLeftOffset;
-  const int height = (mController->mLineinterval + mController->mLineHeight);
-  int beginx, lastx;
   //切换闪烁状态:在多选时不闪烁游标
   if (row1 == row2 && column1 == column2)
     this->blink();
   else
     this->Closeblink();
-
+  //以下代码重新设置renderAera
+  this->renderAera.clear();
+  //行高=(行间距+字体行高)
+  const int height = (mController->mLineinterval + mController->mLineHeight);
+  int firstx, lastx;
+  const int offset = mController->xLeftOffset;
   //通过row和column获取宽度
   auto col2width = [this, offset](int row, int col) {
     Q_ASSERT(row < mController->mScreenLine.size());
@@ -78,18 +78,16 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
 
   for (int i = altCursor.first; i <= priCursor.first; i++) {
     if (!mController->isBlankLine(i)) {
-      beginx =
-        (i == altCursor.first) ? col2width(i, altCursor.second - 1) : offset;
+      firstx = (i == altCursor.first) ? col2width(i, altCursor.second - 1) :0 ;
       lastx = (i == priCursor.first)
                 ? col2width(i, priCursor.second)
                 : col2width(i, mController->mScreenLine[i]->mString.size() - 1);
     } else {
-      beginx = lastx = 0;
+      firstx = lastx = 0;
     }
-
-    if (beginx == lastx)
-      lastx += 2;
-    renderAera.append(QRect(QPoint(beginx + offset + 1, (i + 0.2) * height),
+    if (firstx == lastx)
+      lastx += 2;//微小的偏移，使游标显示为针状
+    renderAera.append(QRect(QPoint(firstx + offset , (i + 0.2) * height),
                             QPoint(lastx + offset, (i + 1) * height)));
   }
   this->update();

@@ -81,6 +81,8 @@ public:
    * \param column1 游标1列数
    * \param row2 游标2逻辑行数
    * \param column2 游标2列数
+   * 我会根据给定的行和列，计算出需要显示游标的位置，更新 renderArea, 然后通过 update()
+   * 函数调用 paintEvent() 实现游标显示的更新。
    */
   void setPos(int row1, int column1, int row2, int column2);
   /*!
