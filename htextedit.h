@@ -31,7 +31,6 @@ private:
   {
     mCursor->resize(event->size());
     mPaintArea->resize(event->size());
-    mParent->resize(event->size());
     mScrollView->resize(event->size());
   }
   void keyPressEvent(QKeyEvent* ev)

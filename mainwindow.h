@@ -25,7 +25,7 @@ private:
   void save();
   void load();
   HTextEdit* mHTextEdit;
-  void resizeEvent(QResizeEvent* event) { mHTextEdit->resize(event->size()); }
+  void resizeEvent(QResizeEvent* event) {}
 };
 
 #endif // MAINWINDOW_H
