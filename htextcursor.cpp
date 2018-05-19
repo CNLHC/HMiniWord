@@ -51,7 +51,6 @@ HTextCursor::setPos(int row1, int column1)
 void
 HTextCursor::setPos(int row1, int column1, int row2, int column2)
 {
-
   if (column1 < -1)
     column1 = -1;
   if (column2 < -1)
