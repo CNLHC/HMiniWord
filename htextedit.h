@@ -22,6 +22,7 @@ signals:
 
 public slots:
   void resizeTextArea();
+  void autoScrollTextArea();
 
 private:
   HTextCursor* mCursor;
@@ -87,6 +88,14 @@ private:
                           1);
       else
         mCursor->setPos(cor.first, cor.second - 1);
+    } else if (ev->key() == Qt::Key_Up) {
+      mCursor->move(HTextCursor::cursorUp);
+    } else if (ev->key() == Qt::Key_Down) {
+      mCursor->move(HTextCursor::cursorDown);
+    } else if (ev->key() == Qt::Key_Left) {
+      mCursor->move(HTextCursor::cursorLeft);
+    } else if (ev->key() == Qt::Key_Right) {
+      mCursor->move(HTextCursor::cursorRight);
     } else if (ev->text().size() != 0) {
       int contextLine = controller->mScreenLine.size();
       int pos = controller->SL2LL(cor.first); //注意！插入操作是针对逻辑行的

@@ -73,8 +73,16 @@ private:
    * \brief mVerOffset 由垂直滚轮滚动带来的修正值
    */
   int mVerOffset;
+  bool cursorOverflowflag;
 
 public:
+  enum MoveDirection
+  {
+    cursorUp,
+    cursorDown,
+    cursorLeft,
+    cursorRight,
+  };
   /*!
    * \brief 我负责HTextCursor的构造
    * \param parent  父对象指针
@@ -110,9 +118,14 @@ public:
    */
   QPair<int, int> getAltCursor() { return altCursor; }
   /*!
-   * \brief setVerOffsetk 设置由垂直滚动轴引起的偏移
-   * \param offset 偏移量
+   * \brief 移动光标的位置
+   * \param dir MoveDirection 枚举类型
+   * 注意只有存在一个光标 altCursor 和 priCursor 时，才会移动光标
    */
+  void move(MoveDirection dir);
+
+signals:
+  void cursorOverflow();
 
 public slots:
   /*!

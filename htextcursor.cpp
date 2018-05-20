@@ -11,6 +11,7 @@ HTextCursor::HTextCursor(QWidget* parent, HRenderController* controller)
   , mController(controller)
 {
   BlinkTimer = new QTimer(0);
+  cursorOverflowflag = false;
   QObject::connect(BlinkTimer, SIGNAL(timeout()), this, SLOT(toggleBlink()));
   this->resize(parent->size());
 }
@@ -95,6 +96,10 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
       QRect(QPoint(firstx + offset, tRelHeight),
             QPoint(lastx + offset, tRelHeight + 0.8 * tUnitHeight)));
   }
+  if (renderAera.last().bottom() > size().height())
+    cursorOverflowflag = true;
+  else
+    cursorOverflowflag = false;
   this->update();
 }
 void
@@ -121,4 +126,43 @@ HTextCursor::verScrollBarMove(int voffset)
 {
   mVerOffset = voffset;
   setPos(altCursor.first, altCursor.second, priCursor.first, priCursor.second);
+}
+void
+HTextCursor::move(MoveDirection dir)
+{
+  Closeblink();
+  if (priCursor.first != altCursor.first ||
+      priCursor.second != altCursor.second)
+    return;
+  int curRow = priCursor.first;
+  int curCol = priCursor.second;
+  int maxRowIdx = mController->mScreenLine.size() - 1;
+  int maxColIdx = mController->mScreenLine[curRow]->mString.size() - 1;
+  switch (dir) {
+    case cursorDown:
+      curRow++;
+      break;
+    case cursorUp:
+      curRow--;
+      break;
+    case cursorLeft:
+      curCol--;
+      break;
+    case cursorRight:
+      curCol++;
+      break;
+  };
+  maxColIdx = mController->mScreenLine[curRow]->mString.size() - 1;
+  if (curRow < 0)
+    curRow = 0;
+  if (curRow > maxRowIdx)
+    curRow = maxRowIdx;
+  if (curCol < 0)
+    curCol = -1;
+  if (curCol > maxColIdx)
+    curCol = maxColIdx;
+  setPos(curRow, curCol);
+  blink();
+  if (cursorOverflowflag)
+    emit cursorOverflow();
 }
