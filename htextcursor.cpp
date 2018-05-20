@@ -152,11 +152,11 @@ HTextCursor::move(MoveDirection dir)
       curCol++;
       break;
   };
-  maxColIdx = mController->mScreenLine[curRow]->mString.size() - 1;
   if (curRow < 0)
     curRow = 0;
   if (curRow > maxRowIdx)
     curRow = maxRowIdx;
+  maxColIdx = mController->mScreenLine[curRow]->mString.size() - 1;
   if (curCol < 0)
     curCol = -1;
   if (curCol > maxColIdx)
