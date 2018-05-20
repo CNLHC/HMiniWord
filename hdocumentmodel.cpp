@@ -1,5 +1,6 @@
 #include "hdocumentmodel.h"
 
+#include <QDebug>
 #include <QtGlobal>
 HDocumentModel::HDocumentModel()
 {
@@ -33,6 +34,7 @@ void
 HDocumentModel::deleteLogicLine(int pos)
 {
   checkStatus();
+  qDebug() << "Delete LL" << pos;
   destructLogicLine(mLogicLine[pos]);
   mLogicLine.removeAt(pos);
   mCurStatus = qMakePair(pos, HLLDeleted);

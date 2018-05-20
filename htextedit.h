@@ -6,6 +6,7 @@
 #include "htextcursor.h"
 #include <QDebug>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QWidget>
 #include <cctype>
 
@@ -21,12 +22,14 @@ signals:
 
 public slots:
   void resizeTextArea();
+  void debugScrollBar();
 
 private:
   HTextCursor* mCursor;
   HPaintArea* mPaintArea;
   QScrollArea* mScrollView;
   QPair<int, int> tempPoint;
+
   void resizeEvent(QResizeEvent* event)
   {
     mCursor->resize(event->size());
@@ -38,12 +41,13 @@ private:
     auto cor = mCursor->getPriCursor();
     auto controller = mPaintArea->mController;
     if (ev->key() == Qt::Key_Backspace) {
-
       int contextLine = controller->mScreenLine.size();
       int pos = controller->SL2LL(cor.first);
       int column = controller->SLC2LLC(cor.first, cor.second);
+      qDebug() << "del line from Controller" << pos;
       if (column == -1) {
         controller->LineDelete(pos);
+
         if (controller->mLogicLine.size() ==
             0) { //如果删除完后无其他行，那么新建一个空行。
           mPaintArea->mController->LineNew(0, "");
@@ -97,13 +101,22 @@ private:
   }
   void mousePressEvent(QMouseEvent* event)
   {
-    auto p = mPaintArea->point2Coord((event->localPos()));
+    qDebug() << "cursor size" << mCursor->size();
+    qDebug() << "paintarea size" << mPaintArea->size();
+    qDebug() << "scroll size" << mScrollView->size();
+    qDebug() << "Mouse Pos" << event;
+    auto localCor = event->localPos();
+    localCor.setY(localCor.y() + mScrollView->verticalScrollBar()->value());
+    qDebug() << "widget abs Pos" << localCor;
+    auto p = mPaintArea->point2Coord(localCor);
     tempPoint = p;
     this->mCursor->setPos(p.first, p.second, p.first, p.second);
   }
   void mouseMoveEvent(QMouseEvent* event)
   {
-    auto p = mPaintArea->point2Coord((event->localPos()));
+    auto localCor = event->localPos();
+    localCor.setY(localCor.y() + mScrollView->verticalScrollBar()->value());
+    auto p = mPaintArea->point2Coord(localCor);
     this->mCursor->setPos(tempPoint.first, tempPoint.second, p.first, p.second);
   }
   void mouseReleaseEvent(QMouseEvent* event) {}

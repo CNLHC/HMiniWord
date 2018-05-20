@@ -79,12 +79,17 @@ HRenderController::renderLogicLine(QList<QList<screenLineItem>*>::iterator iter)
 {
   Q_ASSERT(iter != mLogicLine.end()); //只有存在的LogicLine才能被渲染
   Q_ASSERT(*iter == nullptr);         //只有空的LogicLine才能被渲染
+
+  //从Model获取当前逻辑行的真实内容
   QSharedPointer<QString> tStr =
     this->mModel->composeLogicLine(iter - this->mLogicLine.begin());
   QFontMetrics fm(this->mFont);
+
   int screenWidth = (this->getParentSize().width() - 15 -
-                     (fm.width("啊") * 1.2)); // 40是滚动条的的宽度
-  auto screenLineList = new QList<screenLineItem>;
+                     (fm.width("啊") * 1.2)); // 15是滚动条的的宽度
+  auto tScreenLineList = new QList<screenLineItem>;
+
+  //--------------从LL计算出一个SL列表:begin---------------
   int mul = 1, breakPoint = 0;
   auto genWidthList = [](QStringRef str, QFontMetrics& fm) {
     QList<int> widthList;
@@ -94,7 +99,7 @@ HRenderController::renderLogicLine(QList<QList<screenLineItem>*>::iterator iter)
   };
   for (int i = 1; i <= tStr->size(); i++) {
     if (fm.width(tStr->left(i)) > screenWidth * mul) {
-      screenLineList->append(screenLineItem(
+      tScreenLineList->append(screenLineItem(
         tStr->mid(breakPoint, i - breakPoint),
         genWidthList(tStr->midRef(breakPoint, i - breakPoint), fm)));
       breakPoint = i;
@@ -102,20 +107,18 @@ HRenderController::renderLogicLine(QList<QList<screenLineItem>*>::iterator iter)
     }
   }
   int totalSize = 0;
-  for (int i = 0; i < screenLineList->size(); i++)
-    totalSize += (*screenLineList)[i].mString.size();
-
+  for (int i = 0; i < tScreenLineList->size(); i++)
+    totalSize += (*tScreenLineList)[i].mString.size();
   if (!(totalSize == tStr->size() && totalSize > 0))
-    screenLineList->append(screenLineItem(
+    tScreenLineList->append(screenLineItem(
       tStr->mid(breakPoint, tStr->size() - breakPoint),
       genWidthList(tStr->midRef(breakPoint, tStr->size() - breakPoint), fm)));
+  //--------------从LL计算出一个SL列表:end---------------
 
-  int insertPoint = LL2LastSL(iter - 1);
-
-  for (int i = 0; i < screenLineList->size(); i++)
-    mScreenLine.insert(i + insertPoint + 1, &((*screenLineList)[i]));
-
-  *iter = screenLineList;
+  int insertPoint = LL2LastSL(iter - 1); // 寻找上一逻辑行的最后一个屏幕行位置
+  for (int i = 0; i < tScreenLineList->size(); i++)
+    mScreenLine.insert(i + insertPoint + 1, &((*tScreenLineList)[i]));
+  *iter = tScreenLineList; //重新为逻辑行绑定一个屏幕行
 }
 void
 HRenderController::deleteLogicLine(QList<QList<screenLineItem>*>::iterator iter)
@@ -131,9 +134,11 @@ HRenderController::deRenderLogicLine(
   Q_ASSERT(*iter != nullptr);
   int begin = LL2FirstSL(iter);
   int end = LL2LastSL(iter);
-  for (int i = 0; i <= end; i++) //!这里很容易出错啊...
-    mScreenLine.removeAt(begin);
-  delete *iter;
+  for (
+    int i = begin; i <= end;
+    i++)                         //!这里很容易出错啊...//!20180520更新，这里超容易出错啊！！！坑我两次
+    mScreenLine.removeAt(begin); //删除每一个屏幕行的数据
+  delete *iter;                  //删除容器占用的地址空间
   *iter = nullptr;
 }
 int

@@ -8,9 +8,9 @@ class HTextCursor : public QWidget
 {
   Q_OBJECT
 private:
-    /*!
-    * \brief mParent 存储父类指针.
-    */
+  /*!
+  * \brief mParent 存储父类指针.
+  */
   QWidget* mParent;
   /*!
    * \brief mController 存储聚合的 HRenderController 对象指针。
@@ -23,7 +23,7 @@ private:
   /*!
    * \brief mColor1 游标闪烁颜色1
    */
-  QColor mColor1 = QColor(128, 128, 255,128);
+  QColor mColor1 = QColor(128, 128, 255, 128);
   /*!
    * \brief mColor2 游标闪烁颜色2
    */
@@ -33,7 +33,8 @@ private:
    */
   QColor mCurColor;
   /*!
-   * \brief renderAera 存储了当前有哪些地方需要被渲染。每个需要显示的行对应一个QRect.
+   * \brief renderAera
+   * 存储了当前有哪些地方需要被渲染。每个需要显示的行对应一个QRect.
    */
   QList<QRect> renderAera;
   /*!
@@ -46,7 +47,8 @@ private:
   QPair<int, int> altCursor;
   /*!
    * \brief blink 闪烁游标
-   * 调用本函数将启动一个定时器中断。在该定时器移除后将回调 toggleBlink() 槽.该定时器会自动重置
+   * 调用本函数将启动一个定时器中断。在该定时器移除后将回调 toggleBlink()
+   * 槽.该定时器会自动重置
    */
   void blink();
   /*!
@@ -81,12 +83,14 @@ public:
    * \param column1 游标1列数
    * \param row2 游标2逻辑行数
    * \param column2 游标2列数
-   * 我会根据给定的行和列，计算出需要显示游标的位置，更新 renderArea, 然后通过 update()
+   * 我会根据给定的行和列，计算出需要显示游标的位置，更新 renderArea, 然后通过
+   * update()
    * 函数调用 paintEvent() 实现游标显示的更新。
    */
   void setPos(int row1, int column1, int row2, int column2);
   /*!
-   * \brief setPos(int row1, int column1, int row2, int column2) 的重载类型，用于两个游标位置相同时的游标设置。
+   * \brief setPos(int row1, int column1, int row2, int column2)
+   * 的重载类型，用于两个游标位置相同时的游标设置。
    * \param row1
    * \param column1
    */

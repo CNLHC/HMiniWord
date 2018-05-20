@@ -77,7 +77,7 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
   };
   for (int i = altCursor.first; i <= priCursor.first; i++) {
     if (!mController->isBlankLine(i)) {
-      firstx = (i == altCursor.first) ? col2width(i, altCursor.second - 1) :0 ;
+      firstx = (i == altCursor.first) ? col2width(i, altCursor.second - 1) : 0;
       lastx = (i == priCursor.first)
                 ? col2width(i, priCursor.second)
                 : col2width(i, mController->mScreenLine[i]->mString.size() - 1);
@@ -85,8 +85,8 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
       firstx = lastx = 0;
     }
     if (firstx == lastx)
-      lastx += 2;//微小的偏移，使游标显示为针状
-    renderAera.append(QRect(QPoint(firstx + offset , (i + 0.2) * height),
+      lastx += 2; //微小的偏移，使游标显示为针状
+    renderAera.append(QRect(QPoint(firstx + offset, (i + 0.2) * height),
                             QPoint(lastx + offset, (i + 1) * height)));
   }
   this->update();
