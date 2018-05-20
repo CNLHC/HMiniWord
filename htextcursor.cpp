@@ -90,7 +90,6 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
       lastx += 2; //微小的偏移，使游标显示为针状
     int tAbsHeight = (i + 0.2) * tUnitHeight;
     int tRelHeight = tAbsHeight - mVerOffset;
-    qDebug() << "abs:" << tAbsHeight << "rel:" << tRelHeight;
 
     renderAera.append(
       QRect(QPoint(firstx + offset, tRelHeight),

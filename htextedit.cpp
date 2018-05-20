@@ -43,7 +43,6 @@ HTextEdit::HTextEdit(QWidget* parent)
   setSaveFlag();
   this->setMinimumWidth(600);
   this->setMaximumWidth(600);
-  this->grabKeyboard();
 }
 void
 

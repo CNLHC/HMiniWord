@@ -72,6 +72,7 @@ public:
     mPaintArea->mController->LineNew(0, "");
     mCursor->setPos(0, -1);
   }
+  HPaintArea* mPaintArea;
 
 signals:
   void printableKeyPress();
@@ -83,7 +84,6 @@ public slots:
 
 private:
   HTextCursor* mCursor;
-  HPaintArea* mPaintArea;
   bool mChangedFlag;
   QScrollArea* mScrollView;
   QPair<int, int> tempPoint;
@@ -187,14 +187,14 @@ private:
   }
   void mousePressEvent(QMouseEvent* event)
   {
-    qDebug() << "cursor size" << mCursor->size();
-    qDebug() << "paintarea size" << mPaintArea->size();
-    qDebug() << "scroll size" << mScrollView->size();
-    qDebug() << "Mouse Pos" << event;
+    //    qDebug() << "cursor size" << mCursor->size();
+    //    qDebug() << "paintarea size" << mPaintArea->size();
+    //    qDebug() << "scroll size" << mScrollView->size();
+    //    qDebug() << "Mouse Pos" << event;
 
     auto p = mPaintArea->point2Coord(event->localPos());
     tempPoint = p;
-    qDebug() << "row" << p;
+    //    qDebug() << "row" << p;
     this->mCursor->setPos(p.first, p.second, p.first, p.second);
   }
   void mouseMoveEvent(QMouseEvent* event)
