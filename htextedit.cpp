@@ -20,14 +20,13 @@ HTextEdit::HTextEdit(QWidget* parent)
   mScrollView->setWidget(mPaintArea);
   mCursor->stackUnder(mPaintArea);
 
-  QObject::connect(mPaintArea->mController, SIGNAL(lineExceed()), this,
-                   SLOT(resizeTextArea()));
-
   mScrollView->widget()->resize(parent->size());
   mScrollView->resize(parent->size());
   mCursor->resize(parent->size());
   resize(parent->size());
 
+  QObject::connect(mPaintArea->mController, SIGNAL(lineExceed()), this,
+                   SLOT(resizeTextArea()));
   QObject::connect(mScrollView->verticalScrollBar(), SIGNAL(valueChanged(int)),
                    this->mCursor, SLOT(verScrollBarMove(int)));
   QObject::connect(mScrollView->verticalScrollBar(), SIGNAL(valueChanged(int)),
@@ -44,5 +43,7 @@ void
 HTextEdit::resizeTextArea()
 {
   this->mPaintArea->resize(size().width(),
-                           this->mPaintArea->mController->maxHeight);
+                           mPaintArea->size().height() + size().height() / 2);
+  int value = this->mScrollView->verticalScrollBar()->value();
+  this->mScrollView->verticalScrollBar()->setValue(value + size().height() / 2);
 }
