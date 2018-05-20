@@ -105,18 +105,15 @@ private:
     qDebug() << "paintarea size" << mPaintArea->size();
     qDebug() << "scroll size" << mScrollView->size();
     qDebug() << "Mouse Pos" << event;
-    auto localCor = event->localPos();
-    localCor.setY(localCor.y() + mScrollView->verticalScrollBar()->value());
-    qDebug() << "widget abs Pos" << localCor;
-    auto p = mPaintArea->point2Coord(localCor);
+
+    auto p = mPaintArea->point2Coord(event->localPos());
     tempPoint = p;
+    qDebug() << "row" << p;
     this->mCursor->setPos(p.first, p.second, p.first, p.second);
   }
   void mouseMoveEvent(QMouseEvent* event)
   {
-    auto localCor = event->localPos();
-    localCor.setY(localCor.y() + mScrollView->verticalScrollBar()->value());
-    auto p = mPaintArea->point2Coord(localCor);
+    auto p = mPaintArea->point2Coord(event->localPos());
     this->mCursor->setPos(tempPoint.first, tempPoint.second, p.first, p.second);
   }
   void mouseReleaseEvent(QMouseEvent* event) {}

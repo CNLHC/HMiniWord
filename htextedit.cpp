@@ -28,11 +28,14 @@ HTextEdit::HTextEdit(QWidget* parent)
   mCursor->resize(parent->size());
   resize(parent->size());
 
-  mPaintArea->mController->LineNew(0, "");
-  mCursor->setPos(0, -1);
-
   QObject::connect(mScrollView->verticalScrollBar(), SIGNAL(valueChanged(int)),
                    this, SLOT(debugScrollBar()));
+  QObject::connect(mScrollView->verticalScrollBar(), SIGNAL(valueChanged(int)),
+                   this->mPaintArea, SLOT(offsetChange(int)));
+
+  mPaintArea->mController->LineNew(0, "");
+  mCursor->setPos(0, -1);
+  mScrollView->verticalScrollBar()->setValue(0);
   this->grabKeyboard();
 }
 void

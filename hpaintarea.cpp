@@ -30,32 +30,40 @@ HPaintArea::paintEvent(QPaintEvent* event)
     painter.drawText((*i)->mRenderPos, (*i)->mString);
   }
 }
+
+void
+HPaintArea::offsetChange(int vOffset)
+{
+  this->mVerOffset = vOffset;
+}
 QPair<int, int>
 HPaintArea::point2Coord(QPointF point)
 {
+  qDebug() << mVerOffset;
+  point.setY(point.y() + mVerOffset);
   int lineInterval = this->mController->mLineinterval;
   int lineHeight = QFontMetrics(this->mController->mFont).height();
   int maxH = (lineInterval + lineHeight) * mController->mScreenLine.size();
   int row = 0, column = 0;
 
   //获取屏幕行数
-  if (point.y() > maxH) {//光标超出最后一行
+  if (point.y() > maxH) { //光标超出最后一行
     row = mController->mScreenLine.size() - 1;
     row = row > 0 ? row : 0;
-  } else if (point.y()<0)//光标为负
-      row =0;
-  else if (static_cast<int>(point.y()) % (lineInterval + lineHeight) == 0) //光标恰好在行交界处
+  } else if (point.y() < 0) //光标为负
+    row = 0;
+  else if (static_cast<int>(point.y()) % (lineInterval + lineHeight) ==
+           0) //光标恰好在行交界处
     row = (point.y() - 1) / (lineInterval + lineHeight);
   else //光标在行中
     row = point.y() > 0 ? point.y() / (lineInterval + lineHeight) : 0;
-
 
   //获取屏幕行列数
   if (mController->mScreenLine.size() == 0) {
     Q_ASSERT(1 == 0); //这种情形不应该出现,至少有一个空行存在
     column = -1;
   } else if (mController->isBlankLine(row)) {
-    column = -1;//如果当前为空行，则设置游标到-1位置
+    column = -1; //如果当前为空行，则设置游标到-1位置
   } else if (point.x() >= mController->mScreenLine[row]->mWidthList.back()) {
     column = mController->mScreenLine[row]->mWidthList.size() - 1;
   } else {
