@@ -64,7 +64,8 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
   //以下代码重新设置renderAera
   this->renderAera.clear();
   //行高=(行间距+字体行高)
-  const int height = (mController->mLineinterval + mController->mLineHeight);
+  const int tUnitHeight =
+    (mController->mLineinterval + mController->mLineHeight);
   int firstx, lastx;
   const int offset = mController->xLeftOffset;
   //通过row和column获取宽度
@@ -86,8 +87,13 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
     }
     if (firstx == lastx)
       lastx += 2; //微小的偏移，使游标显示为针状
-    renderAera.append(QRect(QPoint(firstx + offset, (i + 0.2) * height),
-                            QPoint(lastx + offset, (i + 1) * height)));
+    int tAbsHeight = (i + 0.2) * tUnitHeight;
+    int tRelHeight = tAbsHeight - mVerOffset;
+    qDebug() << "abs:" << tAbsHeight << "rel:" << tRelHeight;
+
+    renderAera.append(
+      QRect(QPoint(firstx + offset, tRelHeight),
+            QPoint(lastx + offset, tRelHeight + 0.8 * tUnitHeight)));
   }
   this->update();
 }
@@ -109,4 +115,10 @@ HTextCursor::paintEvent(QPaintEvent* event)
   painter.setPen(Qt::black);
   for (int i = 0; i < renderAera.size(); i++)
     painter.fillRect(renderAera[i], QBrush(this->mCurColor));
+}
+void
+HTextCursor::verScrollBarMove(int voffset)
+{
+  mVerOffset = voffset;
+  setPos(altCursor.first, altCursor.second, priCursor.first, priCursor.second);
 }

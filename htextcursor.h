@@ -69,6 +69,10 @@ private:
    * \todo 解释双游标的设计，并在此处链接该解释
    */
   void setCursor(int row1, int column1, int row2, int column2);
+  /*!
+   * \brief mVerOffset 由垂直滚轮滚动带来的修正值
+   */
+  int mVerOffset;
 
 public:
   /*!
@@ -105,12 +109,17 @@ public:
    * \return  QPair,代表副游标所在的行与列
    */
   QPair<int, int> getAltCursor() { return altCursor; }
+  /*!
+   * \brief setVerOffsetk 设置由垂直滚动轴引起的偏移
+   * \param offset 偏移量
+   */
 
 public slots:
   /*!
    * \brief toggleBlink 切换当前游标的显示颜色，实现闪烁的效果。
    */
   void toggleBlink();
+  void verScrollBarMove(int offset);
 };
 
 #endif // HTEXTCURSOR_H

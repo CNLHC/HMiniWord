@@ -39,6 +39,11 @@ public:
    */
   HRenderController* getController() { return mController; }
 
+  /*!
+   * \brief setVerOffsetk 设置由垂直滚动轴引起的偏移
+   * \param offset 偏移量
+   */
+
 private:
   /*!
    * \brief 重写父类绘图方法
@@ -52,11 +57,10 @@ private:
   void paintEvent(QPaintEvent* event) override;
   /*!
    * \brief mVerOffset 由垂直滚轮滚动带来的修正值
-   * \sa offserChange
    */
   int mVerOffset;
 public slots:
-  void offsetChange(int vOffset);
+  void verScrollBarMove(int offset);
 };
 
 #endif // HPAINTAREA_H

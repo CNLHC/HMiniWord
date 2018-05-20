@@ -31,15 +31,9 @@ HPaintArea::paintEvent(QPaintEvent* event)
   }
 }
 
-void
-HPaintArea::offsetChange(int vOffset)
-{
-  this->mVerOffset = vOffset;
-}
 QPair<int, int>
 HPaintArea::point2Coord(QPointF point)
 {
-  qDebug() << mVerOffset;
   point.setY(point.y() + mVerOffset);
   int lineInterval = this->mController->mLineinterval;
   int lineHeight = QFontMetrics(this->mController->mFont).height();
@@ -76,4 +70,10 @@ HPaintArea::point2Coord(QPointF point)
   }
 
   return qMakePair(row, column);
+}
+
+void
+HPaintArea::verScrollBarMove(int voffset)
+{
+  mVerOffset = voffset;
 }

@@ -22,7 +22,6 @@ signals:
 
 public slots:
   void resizeTextArea();
-  void debugScrollBar();
 
 private:
   HTextCursor* mCursor;

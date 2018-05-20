@@ -29,12 +29,14 @@ HTextEdit::HTextEdit(QWidget* parent)
   resize(parent->size());
 
   QObject::connect(mScrollView->verticalScrollBar(), SIGNAL(valueChanged(int)),
-                   this, SLOT(debugScrollBar()));
+                   this->mCursor, SLOT(verScrollBarMove(int)));
   QObject::connect(mScrollView->verticalScrollBar(), SIGNAL(valueChanged(int)),
-                   this->mPaintArea, SLOT(offsetChange(int)));
+                   this->mPaintArea, SLOT(verScrollBarMove(int)));
 
   mPaintArea->mController->LineNew(0, "");
   mCursor->setPos(0, -1);
+  mScrollView->verticalScrollBar()->setValue(
+    1); //触发valueChanged信号，帮助子元件设置初值
   mScrollView->verticalScrollBar()->setValue(0);
   this->grabKeyboard();
 }
@@ -43,10 +45,4 @@ HTextEdit::resizeTextArea()
 {
   this->mPaintArea->resize(size().width(),
                            this->mPaintArea->mController->maxHeight);
-}
-
-void
-HTextEdit::debugScrollBar()
-{
-  qDebug() << mScrollView->verticalScrollBar()->value();
 }
