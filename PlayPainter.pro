@@ -43,5 +43,4 @@ HEADERS += \
     htextedit.h \
     hdocumentfind.h
 
-FORMS += \
-        mainwindow.ui
+FORMS +=

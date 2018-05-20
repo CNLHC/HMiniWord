@@ -29,7 +29,6 @@ private:
   bool changedWarning();
   void findSub();
   HTextEdit* mHTextEdit;
-  void resizeEvent(QResizeEvent* event) {}
 };
 
 #endif // MAINWINDOW_H

@@ -199,10 +199,10 @@ private:
   }
   void mouseMoveEvent(QMouseEvent* event)
   {
+    Q_UNUSED(event);
     auto p = mPaintArea->point2Coord(event->localPos());
     this->mCursor->setPos(tempPoint.first, tempPoint.second, p.first, p.second);
   }
-  void mouseReleaseEvent(QMouseEvent* event) {}
   QSize sizeHint() { return QSize(600, 600); }
 };
 

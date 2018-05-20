@@ -2,6 +2,7 @@
 #define HDOCUMENTFIND_H
 
 #include <QObject>
+#include <QThread>
 #include <QWidget>
 
 class hdocumentfind : public QThread
