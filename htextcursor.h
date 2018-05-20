@@ -46,16 +46,6 @@ private:
    */
   QPair<int, int> altCursor;
   /*!
-   * \brief blink 闪烁游标
-   * 调用本函数将启动一个定时器中断。在该定时器移除后将回调 toggleBlink()
-   * 槽.该定时器会自动重置
-   */
-  void blink();
-  /*!
-   * \brief 关闭由调用 blink() 而启动的定时器。
-   */
-  void Closeblink();
-  /*!
    * \brief 重载paintEvent 将游标绘制在屏幕上.
    * \param event 默认参数
    */
@@ -83,6 +73,16 @@ public:
     cursorLeft,
     cursorRight,
   };
+  /*!
+   * \brief blink 闪烁游标
+   * 调用本函数将启动一个定时器中断。在该定时器移除后将回调 toggleBlink()
+   * 槽.该定时器会自动重置
+   */
+  void blink();
+  /*!
+   * \brief 关闭由调用 blink() 而启动的定时器。
+   */
+  void Closeblink();
   /*!
    * \brief 我负责HTextCursor的构造
    * \param parent  父对象指针

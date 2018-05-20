@@ -96,7 +96,7 @@ HTextCursor::setPos(int row1, int column1, int row2, int column2)
       QRect(QPoint(firstx + offset, tRelHeight),
             QPoint(lastx + offset, tRelHeight + 0.8 * tUnitHeight)));
   }
-  if (renderAera.last().bottom() > size().height())
+  if (renderAera.size() > 0 && renderAera.last().bottom() > size().height())
     cursorOverflowflag = true;
   else
     cursorOverflowflag = false;

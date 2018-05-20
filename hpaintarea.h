@@ -38,7 +38,6 @@ public:
    * \return 指向以我的屏幕控制器的指针
    */
   HRenderController* getController() { return mController; }
-
   /*!
    * \brief setVerOffsetk 设置由垂直滚动轴引起的偏移
    * \param offset 偏移量

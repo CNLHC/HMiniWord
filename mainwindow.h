@@ -22,8 +22,12 @@ private:
   QMenu* mainWindowMenu;
   QMenu* dockWidgetMenu;
   void setupMenuBar();
-  void save();
+  bool save();
+  bool saveAs();
   void load();
+  void NewFile();
+  bool changedWarning();
+  void findSub();
   HTextEdit* mHTextEdit;
   void resizeEvent(QResizeEvent* event) {}
 };

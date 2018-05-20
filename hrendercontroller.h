@@ -21,7 +21,6 @@ private:
     QPoint mRenderPos;
   };
   QWidget* mParent;
-  HDocumentModel* mModel;
   void createLogicLine(int pos);
   /*!
    * \brief renderLogicLine 重新渲染当前逻辑行
@@ -41,6 +40,7 @@ private:
    * \brief 获取父元素尺寸
    */
   QSize getParentSize() { return this->mParent->size(); }
+  HDocumentModel* mModel;
 
 signals:
   void lineExceed();
@@ -110,6 +110,11 @@ public:
    */
   bool isBlankLine(int row);
 
+  /*!
+   * \brief 返回 该Controller对应的Model的指针
+   */
+  HDocumentModel* getModel() { return mModel; }
+
   int maxHeight;
   int mLineinterval = 0;
   int xLeftOffset = 5;
@@ -139,6 +144,11 @@ public:
      * \param str 要插入的字符串
      */
   void LineNew(int row, QString str);
+  /*!
+     * \brief LineNew(int row, QString str 的重载类型.我将在最后一行插入内容。
+     * \param str 要插入的字符串
+     */
+  void LineNew(QString str);
   /*!
      * \brief 由屏幕行的行数得到逻辑行的行数
      * \param row 屏幕行的行数

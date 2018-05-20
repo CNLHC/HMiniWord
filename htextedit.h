@@ -5,9 +5,12 @@
 #include "hrendercontroller.h"
 #include "htextcursor.h"
 #include <QDebug>
+#include <QFile>
+#include <QMessageBox>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QWidget>
+#include <QtGlobal>
 #include <cctype>
 
 class HTextEdit : public QWidget
@@ -15,29 +18,103 @@ class HTextEdit : public QWidget
   Q_OBJECT
 public:
   explicit HTextEdit(QWidget* parent = nullptr);
-
   QWidget* mParent;
+  QString filePath;
+  /*!
+   * \brief 返回当前文档在上次修改后是否变更过
+   */
+  bool isChanged() { return mChangedFlag; }
+  /*!
+   * \brief 标记当前文档已经被保存过
+   */
+  void setSaveFlag() { mChangedFlag = false; }
+  bool dumpToFile()
+  {
+    QFile file(this->filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      QMessageBox msgBox(this);
+      msgBox.setText(tr("文件保存失败:无法打开文件"));
+      msgBox.exec();
+      return false;
+    }
+    QTextStream out(&file);
+    auto model = mPaintArea->mController->getModel();
+    for (auto i = 0; i < model->getLogicLineSize(); i++)
+      out << (model->composeLogicLine(i)->toUtf8()) << endl;
+    setSaveFlag();
+    file.close();
+    return true;
+  }
+  bool loadFromFile(QString path)
+  {
+    clearCurBuffer();
+    auto ctr = this->mPaintArea->mController;
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      QMessageBox msgBox(this);
+      msgBox.setText(tr("文件打开失败:无法打开文件"));
+      msgBox.exec();
+      InitialBuf();
+      return false;
+    }
+    filePath = path;
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+      QString line = in.readLine();
+      ctr->LineNew(line);
+    }
+    setSaveFlag();
+    return true;
+  }
+  void InitialBuf()
+  {
+    clearCurBuffer();
+    mPaintArea->mController->LineNew(0, "");
+    mCursor->setPos(0, -1);
+  }
+
 signals:
   void printableKeyPress();
 
 public slots:
   void resizeTextArea();
   void autoScrollTextArea();
+  void setChangedStatus() { mChangedFlag = true; }
 
 private:
   HTextCursor* mCursor;
   HPaintArea* mPaintArea;
+  bool mChangedFlag;
   QScrollArea* mScrollView;
   QPair<int, int> tempPoint;
-
+  void clearCurBuffer()
+  {
+    auto ctr = this->mPaintArea->mController;
+    while (ctr->mLogicLine.size() > 0)
+      ctr->LineDelete(0);
+  }
   void resizeEvent(QResizeEvent* event)
   {
     mCursor->resize(event->size());
-    mPaintArea->resize(event->size());
     mScrollView->resize(event->size());
+    int oH = mPaintArea->size().height();
+    mPaintArea->resize(event->size().width(), oH);
+  }
+  void wheelEvent(QWheelEvent* ev)
+  {
+    auto currentValue = mScrollView->verticalScrollBar()->value();
+    auto MaxValue = mScrollView->verticalScrollBar()->maximum();
+    auto MinValue = mScrollView->verticalScrollBar()->minimum();
+    if (ev->angleDelta().y() < 0)
+      mScrollView->verticalScrollBar()->setValue(
+        qMin(currentValue + 50, MaxValue));
+    else
+      mScrollView->verticalScrollBar()->setValue(
+        qMax(currentValue - 50, MinValue));
   }
   void keyPressEvent(QKeyEvent* ev)
   {
+    mCursor->Closeblink();
     auto cor = mCursor->getPriCursor();
     auto controller = mPaintArea->mController;
     if (ev->key() == Qt::Key_Backspace) {
@@ -106,6 +183,7 @@ private:
       else
         mCursor->setPos(cor.first, cor.second + 1);
     }
+    mCursor->blink();
   }
   void mousePressEvent(QMouseEvent* event)
   {
@@ -125,7 +203,6 @@ private:
     this->mCursor->setPos(tempPoint.first, tempPoint.second, p.first, p.second);
   }
   void mouseReleaseEvent(QMouseEvent* event) {}
-
   QSize sizeHint() { return QSize(600, 600); }
 };
 

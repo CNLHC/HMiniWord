@@ -16,10 +16,19 @@ HRenderController::HRenderController(QWidget* parent)
 HRenderController::~HRenderController()
 {
   delete mModel;
+  for (int i = 0; i < mScreenLine.size(); i++) {
+    delete mScreenLine.at(i);
+  }
 }
 void
 HRenderController::LineNew(int row, QString str)
 {
+  this->mModel->createLogicLine(str, row);
+}
+void
+HRenderController::LineNew(QString str)
+{
+  int row = mModel->getLogicLineSize();
   this->mModel->createLogicLine(str, row);
 }
 void
@@ -64,7 +73,6 @@ HRenderController::renderDisptach()
     default:
       break;
   }
-
   determinRenderPosition();
   this->mParent->update();
   this->mModel->ensureStatus();
@@ -134,11 +142,11 @@ HRenderController::deRenderLogicLine(
   Q_ASSERT(*iter != nullptr);
   int begin = LL2FirstSL(iter);
   int end = LL2LastSL(iter);
-  for (
-    int i = begin; i <= end;
-    i++)                         //!这里很容易出错啊...//!20180520更新，这里超容易出错啊！！！坑我两次
+  for (int i = begin; i <= end; i++) {
+    if (mScreenLine.at(begin) != nullptr)
+      delete mScreenLine.at(begin);
     mScreenLine.removeAt(begin); //删除每一个屏幕行的数据
-  delete *iter;                  //删除容器占用的地址空间
+  }                              //!这里很容易出错啊...//!20180520更新，这里超容易出错啊！！！坑我两次
   *iter = nullptr;
 }
 int

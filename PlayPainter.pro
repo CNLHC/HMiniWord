@@ -30,7 +30,8 @@ SOURCES += \
     htextcursor.cpp \
     hdocumentmodel.cpp \
     hrendercontroller.cpp \
-    htextedit.cpp
+    htextedit.cpp \
+    hdocumentfind.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     hdocumentmodel.h \
     hrendercontroller.h \
     概要设计.h \
-    htextedit.h
+    htextedit.h \
+    hdocumentfind.h
 
 FORMS += \
         mainwindow.ui
