@@ -9,6 +9,7 @@ HTextEditFindView::HTextEditFindView(HTextEdit* HTE, QWidget* parent)
   findButton = new QPushButton;
   subButton = new QPushButton;
   mProgressBar = new QProgressBar(this);
+  mProgressBar->setVisible(false);
   mFindSession = new hdocumentfind(mHTextEdit->mPaintArea->mController);
 
   FindSubLayout = new QVBoxLayout;
@@ -28,14 +29,48 @@ HTextEditFindView::HTextEditFindView(HTextEdit* HTE, QWidget* parent)
 
   QObject::connect(mFindSession, SIGNAL(searchProgress(int)),
                    this->mProgressBar, SLOT(setValue(int)));
+
+  QObject::connect(mFindSession, SIGNAL(searchOver()), this,
+                   SLOT(findOverCallback()));
+
   QObject::connect(this->findInput, SIGNAL(textChanged(QString)), this,
                    SLOT(findInputChanged(QString)));
-  //  QObject::connect(this->findButton, SIGNAL(clicked(bool)), this,
-  //                   SLOT(findSub()));
+  QObject::connect(this->findButton, SIGNAL(clicked(bool)), this,
+                   SLOT(findSub()));
+  isFindProcessing = false;
 }
+
+void
+HTextEditFindView::findSub()
+{
+  qDebug() << "find";
+  qDebug() << mCurResult;
+  if (!isFindProcessing) {
+    isFindProcessing = true;
+    mFindSession->initNewSession(findInput->text());
+    findButton->setText("wait...");
+    findButton->setEnabled(false);
+    findInput->setEnabled(false);
+    mProgressBar->setVisible(true);
+    mFindSession->run();
+  }
+}
+void
+HTextEditFindView::findOverCallback()
+{
+  findButton->setText("next");
+  findButton->setEnabled(true);
+  findInput->setEnabled(true);
+  mProgressBar->setValue(0);
+  mProgressBar->setFormat("find results");
+  mCurResult = mFindSession->getResult();
+}
+
 void
 HTextEditFindView::findInputChanged(QString fstr)
 {
+  isFindProcessing = false;
+  findButton->setText("查找");
   if (fstr.length() > 0)
     findButton->setEnabled(true);
   else

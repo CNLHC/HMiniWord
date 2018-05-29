@@ -28,16 +28,16 @@ private:
   QProgressBar* mProgressBar;
   hdocumentfind* mFindSession;
   QVBoxLayout* FindSubLayout;
-
   bool isFindUIActivated;
   bool isFindProcessing;
+  QList<QPair<int, int>> mCurResult;
 
 signals:
 
 private slots:
   void findInputChanged(QString fstr);
-
-  //  void findSub();
+  void findSub();
+  void findOverCallback();
 };
 
 #endif // HTEXTEDITFINDVIEW_H
