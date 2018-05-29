@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget* parent)
 
   mMainLayout = new QVBoxLayout;
   mHTextEdit = new HTextEdit(this);
-  mHTextFind = new HTextEditFindView(this);
+  mHTextFind = new HTextEditFindView(mHTextEdit, this);
   mHTextFind->setVisible(false);
 
   QWidget* window = new QWidget();

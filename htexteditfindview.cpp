@@ -1,13 +1,15 @@
 #include "htexteditfindview.h"
 
-HTextEditFindView::HTextEditFindView(QWidget* parent)
+HTextEditFindView::HTextEditFindView(HTextEdit* HTE, QWidget* parent)
   : QWidget(parent)
+  , mHTextEdit(HTE)
 {
   findInput = new QLineEdit;
   subInput = new QLineEdit;
   findButton = new QPushButton;
   subButton = new QPushButton;
   mProgressBar = new QProgressBar(this);
+  mFindSession = new hdocumentfind(mHTextEdit->mPaintArea->mController);
 
   FindSubLayout = new QVBoxLayout;
   QHBoxLayout* findLayout = new QHBoxLayout;
@@ -22,13 +24,20 @@ HTextEditFindView::HTextEditFindView(QWidget* parent)
   FindSubLayout->addWidget(mProgressBar);
   FindSubLayout->addLayout(findLayout);
   FindSubLayout->addLayout(subLayout);
-
   this->setLayout(FindSubLayout);
 
-  //  QObject::connect(mFindSession, SIGNAL(searchProgress(int)),
-  //                   this->mProgressBar, SLOT(setValue(int)));
-  //  QObject::connect(this->findInput, SIGNAL(textChanged(QString)), this,
-  //                   SLOT(findInputChanged(QString)));
+  QObject::connect(mFindSession, SIGNAL(searchProgress(int)),
+                   this->mProgressBar, SLOT(setValue(int)));
+  QObject::connect(this->findInput, SIGNAL(textChanged(QString)), this,
+                   SLOT(findInputChanged(QString)));
   //  QObject::connect(this->findButton, SIGNAL(clicked(bool)), this,
   //                   SLOT(findSub()));
+}
+void
+HTextEditFindView::findInputChanged(QString fstr)
+{
+  if (fstr.length() > 0)
+    findButton->setEnabled(true);
+  else
+    findButton->setEnabled(false);
 }

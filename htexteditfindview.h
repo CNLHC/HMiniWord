@@ -17,7 +17,7 @@ class HTextEditFindView : public QWidget
 {
   Q_OBJECT
 public:
-  explicit HTextEditFindView(QWidget* parent = nullptr);
+  explicit HTextEditFindView(HTextEdit* HTE, QWidget* parent = nullptr);
 
 private:
   HTextEdit* mHTextEdit;
@@ -35,7 +35,8 @@ private:
 signals:
 
 private slots:
-  //  void findInputChanged(QString fstr);
+  void findInputChanged(QString fstr);
+
   //  void findSub();
 };
 
