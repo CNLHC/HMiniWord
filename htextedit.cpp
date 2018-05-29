@@ -43,8 +43,8 @@ HTextEdit::HTextEdit(QWidget* parent)
   mScrollView->verticalScrollBar()->setValue(1); //须要触发valueChanged信号
   mScrollView->verticalScrollBar()->setValue(0);
   setSaveFlag();
-  this->setMinimumWidth(600);
-  this->setMaximumWidth(600);
+  this->setMinimumHeight(600);
+  //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 void
 

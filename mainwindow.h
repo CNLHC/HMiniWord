@@ -48,6 +48,7 @@ private:
   bool saveAs();
   void load();
   bool changedWarning();
+  void resizeEvent(QResizeEvent* ev) { qDebug() << ev; }
 };
 
 #endif // MAINWINDOW_H

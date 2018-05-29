@@ -21,18 +21,25 @@ namespace UI {
 MainWindow::MainWindow(QWidget* parent)
   : QMainWindow(parent)
 {
-  this->resize(600, 630);
+
+  this->resize(700, 600);
+  this->setMinimumWidth(600);
+  this->setMaximumWidth(600);
 
   mMainLayout = new QVBoxLayout;
   mHTextEdit = new HTextEdit(this);
   mHTextFind = new HTextEditFindView(this);
+  mHTextFind->setVisible(false);
+
   QWidget* window = new QWidget();
 
   mMainLayout->addWidget(mHTextEdit);
+  mMainLayout->addWidget(mHTextFind);
+
   window->setLayout(mMainLayout);
 
-  //  new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this,
-  //                SLOT(ToggleFindDialog()));
+  new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this,
+                SLOT(ToggleFindDialog()));
   new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(save()));
   new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(NewFile()));
 
@@ -50,9 +57,8 @@ MainWindow::setupMenuBar()
   fileMenu->addAction(tr("另存为..."), this, &MainWindow::save);
   fileMenu->addSeparator();
   fileMenu->addAction(tr("&退出"), this, &QWidget::close);
-  //  QMenu* toolMenu = menuBar()->addMenu(tr("工具"));
-  //  toolMenu->addAction(tr("查找与替换"), this,
-  //  &MainWindow::ToggleFindDialog);
+  QMenu* toolMenu = menuBar()->addMenu(tr("工具"));
+  toolMenu->addAction(tr("查找与替换"), this, &MainWindow::ToggleFindDialog);
 }
 MainWindow::~MainWindow()
 {
@@ -132,4 +138,5 @@ MainWindow::NewFile()
 void
 MainWindow::ToggleFindDialog()
 {
+  mHTextFind->setVisible(!mHTextFind->isVisible());
 }
