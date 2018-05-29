@@ -32,6 +32,7 @@ SOURCES += \
     hrendercontroller.cpp \
     htextedit.cpp \
     hdocumentfind.cpp \
+    htexteditfindview.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,6 +43,7 @@ HEADERS += \
     概要设计.h \
     htextedit.h \
     hdocumentfind.h \
+    htexteditfindview.h
 
 FORMS += \
     mainwindow.ui

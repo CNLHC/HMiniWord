@@ -80,6 +80,16 @@ signals:
 public slots:
   void resizeTextArea();
   void autoScrollTextArea();
+
+  /*!
+   * \brief ScrollTextAreaByCursor
+   * Scroll screen according to the position of the HTextCursor::altCursor.
+   * If the selection exceeds the visible area, i will scroll until  the
+   * selection is
+   * in the centre of the visible area.
+   * Otherwise, I will donothing.
+   */
+  void ScrollTextAreaByCursor();
   void setChangedStatus() { mChangedFlag = true; }
 
 private:

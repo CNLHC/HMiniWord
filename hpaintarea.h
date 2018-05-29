@@ -60,6 +60,14 @@ private:
   int mVerOffset;
 public slots:
   void verScrollBarMove(int offset);
+  /*!
+   * \brief getUnitLineHeight   获取单位行高
+   * \return 单位行高
+   */
+  int getUnitLineHeight()
+  {
+    return (mController->mLineinterval + mController->mLineHeight);
+  }
 };
 
 #endif // HPAINTAREA_H

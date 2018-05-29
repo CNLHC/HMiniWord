@@ -29,8 +29,10 @@ HTextEdit::HTextEdit(QWidget* parent)
                    this, SLOT(setChangedStatus()));
   QObject::connect(mPaintArea->mController, SIGNAL(lineExceed()), this,
                    SLOT(resizeTextArea()));
+
   QObject::connect(this->mCursor, SIGNAL(cursorOverflow()), this,
                    SLOT(autoScrollTextArea()));
+
   QObject::connect(mScrollView->verticalScrollBar(), SIGNAL(valueChanged(int)),
                    this->mCursor, SLOT(verScrollBarMove(int)));
   QObject::connect(mScrollView->verticalScrollBar(), SIGNAL(valueChanged(int)),
@@ -65,4 +67,13 @@ HTextEdit::autoScrollTextArea()
   else
     this->mScrollView->verticalScrollBar()->setValue(
       value + (curPaintHeight - curHeight));
+}
+void
+HTextEdit::ScrollTextAreaByCursor()
+{
+  int row = this->mCursor->getAltCursor().first;
+  int Height = this->mPaintArea->getUnitLineHeight() * row;
+  if (Height > this->size().height())
+    this->mScrollView->verticalScrollBar()->setValue(
+      row * Height - 0.5 * this->size().height());
 }

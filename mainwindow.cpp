@@ -22,51 +22,24 @@ MainWindow::MainWindow(QWidget* parent)
   : QMainWindow(parent)
 {
   this->resize(600, 630);
+
   mMainLayout = new QVBoxLayout;
-
   mHTextEdit = new HTextEdit(this);
-  mMainLayout->addWidget(mHTextEdit);
-
-  findInput = new QLineEdit;
-  subInput = new QLineEdit;
-  findButton = new QPushButton;
-  subButton = new QPushButton;
-  FindSubLayout = new QVBoxLayout;
-  mProgressBar = new QProgressBar(this);
-  QHBoxLayout* findLayout = new QHBoxLayout;
-  findLayout->addWidget(findInput);
-  findLayout->addWidget(findButton);
-  findButton->setText("查找");
-
-  QHBoxLayout* subLayout = new QHBoxLayout;
-  subLayout->addWidget(subInput);
-  subLayout->addWidget(subButton);
-  subButton->setText("替换");
-  FindSubLayout->addWidget(mProgressBar);
-  FindSubLayout->addLayout(findLayout);
-  FindSubLayout->addLayout(subLayout);
-  mMainLayout->addLayout(FindSubLayout);
-  SetFindDialogVisible(false);
-
-  isFindActivated = false;
+  mHTextFind = new HTextEditFindView(this);
   QWidget* window = new QWidget();
+
+  mMainLayout->addWidget(mHTextEdit);
   window->setLayout(mMainLayout);
-  new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this, SLOT(findSub()));
+
+  //  new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this,
+  //                SLOT(ToggleFindDialog()));
   new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(save()));
   new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(NewFile()));
+
   setCentralWidget(window);
   setupMenuBar();
 }
 
-void
-MainWindow::SetFindDialogVisible(bool vis)
-{
-  mProgressBar->setVisible(vis);
-  findButton->setVisible(vis);
-  findInput->setVisible(vis);
-  subButton->setVisible(vis);
-  subInput->setVisible(vis);
-}
 void
 MainWindow::setupMenuBar()
 {
@@ -77,28 +50,12 @@ MainWindow::setupMenuBar()
   fileMenu->addAction(tr("另存为..."), this, &MainWindow::save);
   fileMenu->addSeparator();
   fileMenu->addAction(tr("&退出"), this, &QWidget::close);
-  QMenu* toolMenu = menuBar()->addMenu(tr("工具"));
-  toolMenu->addAction(tr("查找与替换"), this, &MainWindow::findSub);
+  //  QMenu* toolMenu = menuBar()->addMenu(tr("工具"));
+  //  toolMenu->addAction(tr("查找与替换"), this,
+  //  &MainWindow::ToggleFindDialog);
 }
 MainWindow::~MainWindow()
 {
-}
-void
-MainWindow::findSub()
-{
-  if (!isFindActivated) {
-    isFindActivated = true;
-    SetFindDialogVisible(true);
-    mProgressBar->setVisible(false);
-    curFindSession =
-      new hdocumentfind("cur", mHTextEdit->mPaintArea->mController);
-    QObject::connect(curFindSession, SIGNAL(searchProgress(int)),
-                     this->mProgressBar, SLOT(setValue(int)));
-    curFindSession->run();
-  } else {
-    SetFindDialogVisible(false);
-    isFindActivated = false;
-  }
 }
 bool
 MainWindow::save()
@@ -170,4 +127,9 @@ MainWindow::NewFile()
     QFileDialog::getSaveFileName(this, tr("选择文件名"), "", tr("*"));
 
   mHTextEdit->InitialBuf();
+}
+
+void
+MainWindow::ToggleFindDialog()
+{
 }

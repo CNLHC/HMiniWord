@@ -68,7 +68,6 @@ HPaintArea::point2Coord(QPointF point)
         break;
       }
   }
-
   return qMakePair(row, column);
 }
 

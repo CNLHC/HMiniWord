@@ -17,16 +17,29 @@ private:
   QString fstr;
   HRenderController* mController;
   QList<QPair<int, int>> result;
+  bool isSessionReady;
 
 public:
-  hdocumentfind(QString findStr, HRenderController* controller)
-    : fstr(findStr)
-    , mController(controller)
+  hdocumentfind(HRenderController* controller)
+    : mController(controller)
   {
+    isSessionReady = false;
+  }
+  void initNewSession(QString fstr)
+  {
+    Q_ASSERT(fstr.length() > 0 && "The search string must't an empty string");
+    if (this->isRunning()) {
+      this->terminate();
+      emit searchBreak();
+    }
+    this->fstr = fstr;
+    this->result.clear();
+    this->isSessionReady = true;
   }
   void run() override
   {
-    result.clear();
+    if (!isSessionReady)
+      return;
     int ScreenLineSize = mController->mScreenLine.size();
     for (int i = 0; i < ScreenLineSize; i++) {
       QString& tStr = mController->mScreenLine[i]->mString;
@@ -39,8 +52,12 @@ public:
     emit searchProgress(100);
     emit searchOver();
   }
+
+  QList<QPair<int, int>> getResult() { return result; }
+
 signals:
   void searchProgress(int);
+  void searchBreak();
   void searchOver();
 };
 
