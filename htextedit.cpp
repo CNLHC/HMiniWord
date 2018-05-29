@@ -73,7 +73,10 @@ HTextEdit::ScrollTextAreaByCursor()
 {
   int row = this->mCursor->getAltCursor().first;
   int Height = this->mPaintArea->getUnitLineHeight() * row;
-  if (Height > this->size().height())
+  qDebug() << row << Height << size();
+  if (Height > this->size().height() / 2)
     this->mScrollView->verticalScrollBar()->setValue(
-      row * Height - 0.5 * this->size().height());
+      Height - 0.5 * this->size().height());
+  else
+    this->mScrollView->verticalScrollBar()->setValue(0);
 }

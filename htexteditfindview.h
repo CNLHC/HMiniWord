@@ -30,9 +30,12 @@ private:
   QVBoxLayout* FindSubLayout;
   bool isFindUIActivated;
   bool isFindProcessing;
+  int CurResultIndex;
   QList<QPair<int, int>> mCurResult;
 
 signals:
+  void findProcess(int);
+  void findResultCursorChange();
 
 private slots:
   void findInputChanged(QString fstr);

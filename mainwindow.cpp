@@ -43,6 +43,8 @@ MainWindow::MainWindow(QWidget* parent)
   new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(save()));
   new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(NewFile()));
 
+  QObject::connect(mHTextFind, SIGNAL(findResultCursorChange()), mHTextEdit,
+                   SLOT(ScrollTextAreaByCursor()));
   setCentralWidget(window);
   setupMenuBar();
 }

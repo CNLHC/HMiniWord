@@ -73,6 +73,7 @@ public:
     mCursor->setPos(0, -1);
   }
   HPaintArea* mPaintArea;
+  HTextCursor* mCursor;
 
 signals:
   void printableKeyPress();
@@ -93,7 +94,6 @@ public slots:
   void setChangedStatus() { mChangedFlag = true; }
 
 private:
-  HTextCursor* mCursor;
   bool mChangedFlag;
   QScrollArea* mScrollView;
   QPair<int, int> tempPoint;

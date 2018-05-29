@@ -29,6 +29,8 @@ HTextEditFindView::HTextEditFindView(HTextEdit* HTE, QWidget* parent)
 
   QObject::connect(mFindSession, SIGNAL(searchProgress(int)),
                    this->mProgressBar, SLOT(setValue(int)));
+  QObject::connect(this, SIGNAL(findProcess(int)), this->mProgressBar,
+                   SLOT(setValue(int)));
 
   QObject::connect(mFindSession, SIGNAL(searchOver()), this,
                    SLOT(findOverCallback()));
@@ -46,6 +48,7 @@ HTextEditFindView::findSub()
   qDebug() << "find";
   qDebug() << mCurResult;
   if (!isFindProcessing) {
+    CurResultIndex = 0;
     isFindProcessing = true;
     mFindSession->initNewSession(findInput->text());
     findButton->setText("wait...");
@@ -53,6 +56,27 @@ HTextEditFindView::findSub()
     findInput->setEnabled(false);
     mProgressBar->setVisible(true);
     mFindSession->run();
+  } else {
+    if (CurResultIndex > mCurResult.length() - 1) {
+      qDebug() << "find over";
+      isFindProcessing = false;
+      findButton->setText("查找");
+      mCurResult.clear();
+      mProgressBar->setVisible(false);
+      mProgressBar->setFormat("%p");
+      mProgressBar->setValue(0);
+      return;
+    }
+    auto tCursor = mHTextEdit->mCursor;
+    int tRow = mCurResult[CurResultIndex].first;
+    int tCol = mCurResult[CurResultIndex].second;
+    tCursor->setPos(tRow, tCol, tRow, tCol + findInput->text().length() - 1);
+    mProgressBar->setFormat(QVariant(CurResultIndex + 1).toString() +
+                            QString("/") +
+                            QVariant(mCurResult.length()).toString());
+    emit findProcess(CurResultIndex * 100 / mCurResult.length());
+    emit findResultCursorChange();
+    CurResultIndex++;
   }
 }
 void
@@ -62,8 +86,8 @@ HTextEditFindView::findOverCallback()
   findButton->setEnabled(true);
   findInput->setEnabled(true);
   mProgressBar->setValue(0);
-  mProgressBar->setFormat("find results");
   mCurResult = mFindSession->getResult();
+  findSub();
 }
 
 void
