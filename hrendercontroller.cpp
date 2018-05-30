@@ -34,6 +34,8 @@ HRenderController::LineNew(QString str)
 void
 HRenderController::LineDelete(int row)
 {
+  if (mLogicLine.length() <= 1)
+    LineNew("");
   this->mModel->deleteLogicLine(row);
 }
 void
@@ -49,7 +51,10 @@ HRenderController::LineUpdateDelete(int row, int begin, int end)
   Q_ASSERT(end >= begin);
   auto originStr = this->mModel->composeLogicLine(row);
   originStr->remove(begin, end - begin + 1);
-  this->mModel->updateLogicLine(*originStr, row);
+  if (originStr->length() == 0)
+    LineDelete(row);
+  else
+    this->mModel->updateLogicLine(*originStr, row);
 }
 void
 HRenderController::renderDisptach()

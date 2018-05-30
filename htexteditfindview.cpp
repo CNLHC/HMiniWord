@@ -133,10 +133,11 @@ HTextEditFindView::sub()
   QString sstr = subInput->text();
   if (CurResultIndex-- > mCurResult.length()) // need --
     return;
+  auto tCursor = mHTextEdit->mCursor;
   auto ctr = mHTextEdit->mPaintArea->getController();
   int tRow = mCurResult[CurResultIndex].first;
   int tCol = mCurResult[CurResultIndex].second;
   ctr->LineUpdateDelete(tRow, tCol, tCol + findInput->text().length() - 1);
   ctr->LineUpdateAdd(tRow, tCol, sstr);
-  findSub();
+  tCursor->setPos(tRow, tCol, tRow, tCol + sstr.length() - 1);
 }
