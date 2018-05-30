@@ -131,7 +131,6 @@ private:
       int contextLine = controller->mScreenLine.size();
       int pos = controller->SL2LL(cor.first);
       int column = controller->SLC2LLC(cor.first, cor.second);
-      qDebug() << "del line from Controller" << pos;
       if (column == -1) {
         controller->LineDelete(pos);
 

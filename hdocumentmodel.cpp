@@ -34,7 +34,6 @@ void
 HDocumentModel::deleteLogicLine(int pos)
 {
   checkStatus();
-  qDebug() << "Delete LL" << pos;
   destructLogicLine(mLogicLine[pos]);
   mLogicLine.removeAt(pos);
   mCurStatus = qMakePair(pos, HLLDeleted);
