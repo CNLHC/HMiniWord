@@ -39,6 +39,8 @@ signals:
 
 private slots:
   void findInputChanged(QString fstr);
+  void subInputChanged(QString fstr);
+  void sub();
   void findSub();
   void findOverCallback();
 };
