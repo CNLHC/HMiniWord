@@ -56,8 +56,9 @@ HTextEditFindView::HTextEditFindView(HTextEdit* HTE, QWidget* parent)
 void
 HTextEditFindView::findSub()
 {
-  if (!isFindProcessing) {
-    CurResultIndex = 0;
+  if (!isFindProcessing) { // New Session
+    CurResultIndex = -1; // Start with -1, When the find down, findNext will be
+                         // invoked and the initial value of this actually is 0.
     isFindProcessing = true;
     mFindSession->initNewSession(findInput->text());
     findButton->setText("wait...");
@@ -65,29 +66,35 @@ HTextEditFindView::findSub()
     findInput->setEnabled(false);
     mProgressBar->setVisible(true);
     mFindSession->run();
-  } else {
-    if (CurResultIndex > mCurResult.length() - 1) {
-      isFindProcessing = false;
-      findButton->setText("查找");
-      mCurResult.clear();
-      mProgressBar->setVisible(false);
-      mProgressBar->setFormat("%p%");
-      mProgressBar->setValue(0);
-      subButton->setVisible(false);
-      subInput->setVisible(false);
-      return;
-    }
-    auto tCursor = mHTextEdit->mCursor;
-    int tRow = mCurResult[CurResultIndex].first;
-    int tCol = mCurResult[CurResultIndex].second;
-    tCursor->setPos(tRow, tCol, tRow, tCol + findInput->text().length() - 1);
-    mProgressBar->setFormat(QVariant(CurResultIndex + 1).toString() +
-                            QString("/") +
-                            QVariant(mCurResult.length()).toString());
-    emit findProcess((1 + CurResultIndex) * 100 / mCurResult.length());
-    emit findResultCursorChange();
-    CurResultIndex++;
+  } else
+    findNext();
+}
+void
+HTextEditFindView::findNext()
+{
+  CurResultIndex++;
+  if (CurResultIndex > mCurResult.length() - 1) {
+    isFindProcessing = false;
+    findButton->setText("查找");
+    mCurResult.clear();
+    mProgressBar->setVisible(false);
+    mProgressBar->setFormat("%p%");
+    mProgressBar->setValue(0);
+    subButton->setVisible(false);
+    subInput->setVisible(false);
+    return;
   }
+  auto tCursor = mHTextEdit->mCursor;
+  int tRow = mCurResult[CurResultIndex].first;
+  int tCol = mCurResult[CurResultIndex].second;
+  tCursor->setPos(tRow, tCol, tRow, tCol + findInput->text().length() - 1);
+
+  mProgressBar->setFormat(QVariant(CurResultIndex + 1).toString() +
+                          QString("/") +
+                          QVariant(mCurResult.length()).toString());
+
+  emit findProcess((1 + CurResultIndex) * 100 / mCurResult.length());
+  emit findResultCursorChange();
 }
 void
 HTextEditFindView::findOverCallback()
@@ -131,13 +138,17 @@ void
 HTextEditFindView::sub()
 {
   QString sstr = subInput->text();
-  if (CurResultIndex-- > mCurResult.length()) // need --
+  if (CurResultIndex > mCurResult.length())
     return;
   auto tCursor = mHTextEdit->mCursor;
   auto ctr = mHTextEdit->mPaintArea->getController();
   int tRow = mCurResult[CurResultIndex].first;
   int tCol = mCurResult[CurResultIndex].second;
-  ctr->LineUpdateDelete(tRow, tCol, tCol + findInput->text().length() - 1);
-  ctr->LineUpdateAdd(tRow, tCol, sstr);
+  int tColLL = ctr->SLC2LLC(tRow, tCol);
+  int tRowLL = ctr->SL2LL(tRow);
+  ctr->LineUpdateDelete(tRowLL, tColLL,
+                        tColLL + findInput->text().length() - 1);
+  ctr->LineUpdateAdd(tRowLL, tColLL, sstr);
   tCursor->setPos(tRow, tCol, tRow, tCol + sstr.length() - 1);
+  findNext();
 }

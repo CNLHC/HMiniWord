@@ -32,6 +32,7 @@ private:
   bool isFindProcessing;
   int CurResultIndex;
   QList<QPair<int, int>> mCurResult;
+  void findNext();
 
 signals:
   void findProcess(int);
