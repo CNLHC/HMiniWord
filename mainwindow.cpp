@@ -38,6 +38,8 @@ MainWindow::MainWindow(QWidget* parent)
 
   window->setLayout(mMainLayout);
 
+  setTabOrder(mHTextEdit, mHTextFind);
+  setTabOrder(mHTextFind, mHTextEdit);
   new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this,
                 SLOT(ToggleFindDialog()));
   new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(save()));

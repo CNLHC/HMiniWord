@@ -183,6 +183,7 @@ private:
     } else if (ev->key() == Qt::Key_Right) {
       mCursor->move(HTextCursor::cursorRight);
     } else if (ev->text().size() != 0) {
+
       int contextLine = controller->mScreenLine.size();
       int pos = controller->SL2LL(cor.first); //注意！插入操作是针对逻辑行的
       int column = controller->SLC2LLC(cor.first, cor.second);
@@ -212,6 +213,28 @@ private:
     auto p = mPaintArea->point2Coord(event->localPos());
     this->mCursor->setPos(tempPoint.first, tempPoint.second, p.first, p.second);
   }
+  void enterEvent(QEvent* ev)
+  {
+    this->setFocus();
+    this->grabKeyboard();
+    qDebug() << ev;
+  }
+  void leaveEvent(QEvent* ev)
+  {
+    this->clearFocus();
+    qDebug() << ev;
+  }
+  void focusInEvent(QFocusEvent* ev)
+  {
+    this->grabKeyboard();
+    qDebug() << ev;
+  }
+  void focusOutEvent(QFocusEvent* ev)
+  {
+    qDebug() << ev;
+    this->releaseKeyboard();
+  }
+
   QSize sizeHint() { return QSize(600, 600); }
 };
 

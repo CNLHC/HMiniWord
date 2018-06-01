@@ -44,7 +44,7 @@ HTextEdit::HTextEdit(QWidget* parent)
   mScrollView->verticalScrollBar()->setValue(0);
   setSaveFlag();
   this->setMinimumHeight(600);
-  //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  this->setFocusPolicy(Qt::StrongFocus);
 }
 void
 
